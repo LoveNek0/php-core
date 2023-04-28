@@ -1,0 +1,10 @@
+out
+bin
+.idea
+packages
+
+.vs
+obj
+*.config
+*.user
+*.sln
