@@ -11,6 +11,6 @@ namespace PHP.Core.Lang.Exceptions
     {
         public readonly TokenItem Token;
         public SyntaxException(string message, TokenItem token) :
-            base($"Syntax exception: {message} at line {token.Position.Line + 1}, column {token.Position.Column + 1}") => Token = token;
+            base($"Syntax exception: {message} at line {token.Line + 1}, column {token.Column + 1}") => Token = token;
     }
 }

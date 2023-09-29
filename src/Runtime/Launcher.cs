@@ -16,14 +16,16 @@ namespace PHP.Runtime
     {
         private static void Test(string file)
         {
-            string path = @"D:\Projects\CSharp\PHPSharp\php-core\tests\" + file;
+            string path = @".\tests\" + file;
             Console.WriteLine($"Testing > {file}");
-            Console.WriteLine(ASTBuilder.BuildFromFile(path));
+            TokenItem[] tokens = Lexer.Tokenize(File.ReadAllText(path));
+            foreach (TokenItem token in tokens)
+                Console.WriteLine(token);
             Console.WriteLine($"End for > {file}");
         }
         public static void Main(string[] args)
         {
-            Test("test_1.php");
+            Test("expressions.php");
             //Test("dowhile.php");
             //Test("for.php");
             //Test("foreach.php");

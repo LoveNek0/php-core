@@ -10,15 +10,19 @@ namespace PHP.Core.Lang.Tokens
     {
         public readonly TokenType Type;
         public readonly string Data;
-        public readonly TokenPosition Position;
+        public readonly int Line;
+        public readonly int Column;
+        public readonly int Position;
 
-        public TokenItem(TokenType type, string data, TokenPosition position)
+        public TokenItem(TokenType type, string data, int line, int column, int position)
         {
             Type = type;
             Data = data;
+            Line = line;
+            Column = column;
             Position = position;
         }
 
-        public override string ToString() => $"TokenItem(Type: {Type}, Data: \"{Data}\", Position: {Position})";
+        public override string ToString() => $"TokenItem(Type: {Type}, Data: \"{Data}\", Position: {Line}:{Column})";
     }
 }

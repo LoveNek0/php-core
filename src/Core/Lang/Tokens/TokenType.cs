@@ -9,86 +9,81 @@ namespace PHP.Core.Lang.Tokens
 {
     public enum TokenType
     {
-        T_EOF,
+        EndOfFile,
+        
+        DocComment,                 // /** */
+        Comment,                    // // # /* */
+        Whitespace,                 //  \t \r \n
+        
+        PHPOpenTag,                 //  <? <?php <%
+        PHPOpenTagWithEcho,         //  <?= <%=
+        PHPCloseTag,                //  ?> %>
+        
+        Comma,                      //  ,
+        Semicolon,                  //  ;
+        
+        BraceOpen,                  //  (
+        BraceClose,                 //  )
+        CurlyBraceOpen,             //  {  
+        CurlyBraceClose,            //  }
+        SquareBraceOpen,            //  [
+        SquareBraceClose,           //  ]
+        
+        Add,                        //  +
+        Sub,                        //  -
+        Mul,                        //  *
+        Div,                        //  /
+        Mod,                        //  %
+        Pow,                        //  **
+        Concat,                     //  .
 
-        //  Arithmetic Operator
-        T_ADD,                      //  +
-        T_SUB,                      //  -
-        T_MUL,                      //  *
-        T_DIV,                      //  /
-        T_MOD,                      //  %
-        T_POW,                      //  **
+        Assignment,                 //  =
+        AssignmentAdd,              //  +=
+        AssignmentSub,              //  -=
+        AssignmentMul,              //  *=
+        AssignmentDiv,              //  /=
+        AssignmentMod,              //  %=
+        AssignmentPow,              //  **=
+        AssignmentConcat,           //  .=
+        
+        BitAnd,                     //  &
+        BitXor,                     //  ^
+        BitNot,                     //  |
+        BitShiftLeft,               //  <<
+        BitShiftRight,              //  >>
 
-        //  Assignment with Operator
-        T_ADD_ASSIGNMENT,           //  +=
-        T_SUB_ASSIGNMENT,           //  -=
-        T_MUL_ASSIGNMENT,           //  *=
-        T_DIV_ASSIGNMENT,           //  /=
-        T_MOD_ASSIGNMENT,           //  %=
-        T_POW_ASSIGNMENT,           //  **=
-        T_CONCAT_ASSIGNMENT,        //  .=
+        AssignmentBitAnd,           //  &=
+        AssignmentBitXor,           //  ^=
+        AssignmentBitNot,           //  |=
+        AssignmentBitShiftLeft,     //  <<=
+        AssignmentBitShiftRight,    //  >>=
+        
+        Coalesce,                   //  ??
+        AssignmentCoalesce,         //  ??=
 
+        LogicalAnd,                 //  && and
+        LogicalOr,                  //  || or
+        LogicalXor,                 //  xor
 
-        //  Bitwise Operator
-        T_BIT_AND,                  //  &
-        T_BIT_XOR,                  //  ^
-        T_BIT_NOT,                  //  |
-        T_BIT_SHIFT_LEFT,           //  <<
-        T_BIT_SHIFT_RIGHT,          //  >>
+        IsEqual,                    //  ==
+        IsIdentical,                //  ===
+        IsNotEqual,                 //  != <>
+        IsNotIdentical,             //  !==
+        IsGreater,                  // >
+        IsSmaller,                  // <
+        IsGreaterOrEqual,           //  >=
+        IsSmallerOrEqual,           //  <=
+        IsSpaceship,                //  <=>
 
-        //  String operator
-        T_CONCAT,                   //  .
+        Decrement,                  //  --
+        Increment,                  //  ++
 
-        //  Assignment Operator
-        T_ASSIGNMENT,                    //  =
+        Integer,                    //  123 012 0x1ac
+        Float,                      //  1.5
+        String,                     //  "" ''
 
-        //  Null Coalescing Operator
-        T_COALESCE,                 //  ??
-
-
-
-        //  Assignment with Bitwise Operator
-        T_BIT_AND_EQUAL,            //  &=
-        T_BIT_XOR_EQUAL,            //  ^=
-        T_BIT_NOT_EQUAL,            //  |=
-        T_BIT_SHIFT_LEFT_EQUAL,     //  <<=
-        T_BIT_SHIFT_RIGHT_EQUAL,    //  >>=
-
-        //  Assignment with String Operator
-
-        //  Assignment with Null Coalescing Operator
-        T_COALESCE_EQUAL,           //  ??=
-
-        //  Logical Operator
-        T_LOGICAL_AND,              //  && and
-        T_LOGICAL_OR,               //  || or
-        T_LOGICAL_XOR,              //  xor
-
-        //  Comparison Operator
-        T_IS_EQUAL,                 //  ==
-        T_IS_IDENTICAL,             //  ===
-        T_IS_NOT_EQUAL,             //  != <>
-        T_IS_NOT_IDENTICAL,         //  !==
-        T_IS_GREATER,               // >
-        T_IS_SMALLER,               // <
-        T_IS_GREATER_OR_EQUAL,      //  >=
-        T_IS_SMALLER_OR_EQUAL,      //  <=
-        T_SPACESHIP,                //  <=>
-
-        //  Incrementing/Decrementing Operator
-        T_DECREMENT,                //  --
-        T_INCREMENT,                //  ++
-
-        //  Data
-        T_LNUMBER,                  //  123 012 0x1ac
-        T_DNUMBER,                  //  1.5
-        T_STRING, //  "" ''
-        T_STATIC_STRING,                   //  parent self T_CONSTANT_ENCAPSED_STRING
-
-        //  Variable
-        T_VARIABLE,                 //  $var_1
-        T_DOLLAR_OPEN_CURLY_BRACES, //  ${
-
+        Variable,                 //  $var_1
+/*
         //  Function
         T_FUNCTION,                 //  function
         T_STATIC,                   //  static
@@ -174,13 +169,6 @@ namespace PHP.Core.Lang.Tokens
         T_METHOD_C,                 //  __METHOD__
         T_NS_C,                     //  __NAMESPACE__
 
-        //  Braces
-        T_BRACE_OPEN,               //  (
-        T_BRACE_CLOSE,              //  )
-        T_CURLY_BRACE_OPEN,         //  {  
-        T_CURLY_BRACE_CLOSE,        //  }
-        T_SQUARE_BRACE_OPEN,        //  [
-        T_SQUARE_BRACE_CLOSE,       //  ]
 
         //  Language Constructions
         T_CONST,                    //  const
@@ -206,11 +194,6 @@ namespace PHP.Core.Lang.Tokens
         T_REQUIRE,                  //  require
         T_REQUIRE_ONCE,             //  require_once
 
-        //  Unused Tokens
-        T_DOC_COMMENT,              // /** */
-        T_COMMENT,                  // // # /* */
-        T_WHITESPACE,               //  \t \r \n
-
         //  Basic Functions
         //  T_UNSET,                    //  unset()
         //  T_EMPTY,                    //  empty()
@@ -221,20 +204,7 @@ namespace PHP.Core.Lang.Tokens
         //  T_LIST,                     //  list()
         //  T_PRINT,                    //  print()
 
-        //  PHP Code Limiters
-        T_OPEN_TAG,                 //  <? <?php <%
-        T_OPEN_TAG_WITH_ECHO,       //  <?= <%=
-        T_CLOSE_TAG,                //  ?> %>
-        T_INLINE_HTML,              //  any text outside php code tags
-
-        //  Separators
-        T_COMMA,                    //  ,
-        T_SEMICOLON,                //  ;
-
-        //  Heredoc
-        T_START_HEREDOC,            //  <<<
-        T_END_HEREDOC,              //  END
-
+        */
         //  Incorrect symbols
         //  T_BAD_CHARACTER, \n (0x0a) и \r (0x0d)
     }
