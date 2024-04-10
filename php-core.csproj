@@ -9,5 +9,13 @@
         <LangVersion>7</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>out\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath>out\</OutputPath>
+    </PropertyGroup>
+
 
 </Project>

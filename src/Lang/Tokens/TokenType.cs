@@ -140,6 +140,7 @@ namespace PHP.Core.Lang.Tokens
         Float,                      //  1.5
         [TokenTypePattern(@"('(?:(([^\\'])|(\\.)))*')")]
         String,                     //  "" ''
+        StaticString,               //  HELLO_WORLD
 
         [TokenTypePattern(@"([$]+([a-zA-Z_][a-zA-Z0-9_]*))")]
         Variable,                 //  $var_1

@@ -14,11 +14,17 @@ namespace PHP.Core.Runtime
     {
         private static void Test(string file)
         {
-            string path = @".\tests\" + file;
+            string path = @"..\..\tests\" + file;
             Console.WriteLine($"Testing > {file}");
-            TokenItem[] tokens = Tokenizer.Tokenize(File.ReadAllText(path));
+            Tokenizer tokenizer = new Tokenizer(File.ReadAllText(path));
+            TokenItem[] tokens = tokenizer.GetTokens();
+            Console.WriteLine("Testing Tokenizer...");
             foreach (TokenItem token in tokens)
                 Console.WriteLine(token);
+            Console.WriteLine("Testing ASTBuilder...");
+            ASTBuilder builder = new ASTBuilder(tokens);
+            ASTRoot root = builder.Build();
+            Console.WriteLine(root);
             Console.WriteLine($"End for > {file}");
         }
         public static void Main(string[] args)

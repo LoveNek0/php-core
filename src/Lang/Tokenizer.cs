@@ -33,13 +33,13 @@ namespace PHP.Core.Lang
             TokenType.Decrement,                  //  --
             TokenType.Sub,                        //  -
             TokenType.AssignmentMul,              //  *=
+            TokenType.AssignmentPow,              //  **=
+            TokenType.Pow,                        //  **
             TokenType.Mul,                        //  *
             TokenType.AssignmentDiv,              //  /=
             TokenType.Div,                        //  /
             TokenType.AssignmentMod,              //  %=
             TokenType.Mod,                        //  %
-            TokenType.AssignmentPow,              //  **=
-            TokenType.Pow,                        //  **
             TokenType.AssignmentConcat,           //  .=
             TokenType.Concat,                     //  .
             TokenType.IsIdentical,                //  ===
