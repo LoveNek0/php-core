@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PHP.Runtime.Exceptions
+namespace PHP.Core.Runtime.Exceptions
 {
     public class RuntimeException : Exception
     {

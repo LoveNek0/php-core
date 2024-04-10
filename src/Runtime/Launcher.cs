@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 using PHP.Core.Lang;
 using PHP.Core.Lang.AST;
 using PHP.Core.Lang.Tokens;
-using PHP.Runtime.Memory;
-using PHP.Runtime.Memory.Data;
 
-namespace PHP.Runtime
+namespace PHP.Core.Runtime
 {
     public class Launcher
     {
@@ -18,7 +16,7 @@ namespace PHP.Runtime
         {
             string path = @".\tests\" + file;
             Console.WriteLine($"Testing > {file}");
-            TokenItem[] tokens = Lexer.Tokenize(File.ReadAllText(path));
+            TokenItem[] tokens = Tokenizer.Tokenize(File.ReadAllText(path));
             foreach (TokenItem token in tokens)
                 Console.WriteLine(token);
             Console.WriteLine($"End for > {file}");

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PHP.Runtime.Memory.Data
+namespace PHP.Core.Runtime.Memory.Data
 {
     public class MemoryInteger : MemoryData
     {

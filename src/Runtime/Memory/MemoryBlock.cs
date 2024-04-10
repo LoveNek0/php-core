@@ -1,12 +1,12 @@
-﻿using PHP.Runtime.Exceptions;
-using PHP.Runtime.Memory.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PHP.Core.Runtime.Exceptions;
+using PHP.Core.Runtime.Memory.Data;
 
-namespace PHP.Runtime.Memory
+namespace PHP.Core.Runtime.Memory
 {
     internal class MemoryBlock
     {
