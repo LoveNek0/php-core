@@ -103,11 +103,11 @@ namespace PHP.Core.Lang.Tokens
         [TokenTypePattern(@"[?][?][=]")]
         AssignmentCoalesce,         //  ??=
 
-        [TokenTypePattern(@"([&][&])|([Aa][Nn][Dd])")]
+        [TokenTypePattern(@"([&][&])|(\b[Aa][Nn][Dd]\b)")]
         LogicalAnd,                 //  && and
-        [TokenTypePattern(@"([|][|])|([Oo][Rr])")]
+        [TokenTypePattern(@"([|][|])|(\b[Oo][Rr]\b)")]
         LogicalOr,                  //  || or
-        [TokenTypePattern(@"[Xx][Oo][Rr]")]
+        [TokenTypePattern(@"\b[Xx][Oo][Rr]\b")]
         LogicalXor,                 //  xor
 
         [TokenTypePattern(@"[=][=]")]
@@ -140,15 +140,16 @@ namespace PHP.Core.Lang.Tokens
         Float,                      //  1.5
         [TokenTypePattern(@"('(?:(([^\\'])|(\\.)))*')")]
         String,                     //  "" ''
-        StaticString,               //  HELLO_WORLD
+        [TokenTypePattern(@"[a-zA-Z_][a-zA-Z0-9_]*")]
+        ConstString,               //  HELLO_WORLD
 
         [TokenTypePattern(@"([$]+([a-zA-Z_][a-zA-Z0-9_]*))")]
         Variable,                 //  $var_1
 
         //  Function
-        [TokenTypePattern(@"[Ff][Uu][Nn][Cc][Tt][Ii][Oo][Nn]")]
+        [TokenTypePattern(@"\b[Ff][Uu][Nn][Cc][Tt][Ii][Oo][Nn]\b")]
         Function,                 //  function
-        [TokenTypePattern(@"[Ss][Tt][Aa][Tt][Ii][Cc]")]
+        [TokenTypePattern(@"\b[Ss][Tt][Aa][Tt][Ii][Cc]\b")]
         Static,                   //  static
         [TokenTypePattern(@"[Rr][Ee][Tt][Uu][Rr][Nn]")]
         Return,                   //  return
@@ -274,7 +275,9 @@ namespace PHP.Core.Lang.Tokens
         NamespaceCallName,      //  \a\b\c
 
         //  Goto points
+        [TokenTypePattern(@"\b[Gg][Oo][Tt][Oo]\b")]
         Goto,                     //  goto
+        [TokenTypePattern(@"[\:]")]
         Colon,                    //  :
 
         //  Including Operators

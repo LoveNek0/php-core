@@ -20,6 +20,8 @@ namespace PHP.Core.Lang
             TokenType.CloseTag,                 //  ?> %>
             TokenType.Comma,                      //  ,
             TokenType.Semicolon,                  //  ;
+            TokenType.DoubleColon,                  //  ::
+            TokenType.Colon,                        //  :
             TokenType.BraceOpen,                  //  (
             TokenType.BraceClose,                 //  )
             TokenType.CurlyBraceOpen,             //  {  
@@ -31,6 +33,7 @@ namespace PHP.Core.Lang
             TokenType.Add,                        //  +
             TokenType.AssignmentSub,              //  -=
             TokenType.Decrement,                  //  --
+            TokenType.ObjectOperator,               //  ->
             TokenType.Sub,                        //  -
             TokenType.AssignmentMul,              //  *=
             TokenType.AssignmentPow,              //  **=
@@ -67,10 +70,12 @@ namespace PHP.Core.Lang
             TokenType.LogicalXor,                 //  xor
             TokenType.AssignmentCoalesce,         //  ??=
             TokenType.Coalesce,                   //  ??
+            TokenType.NullsafeObjectOperator,       //  ?->
             TokenType.Float,                      //  1.5
             TokenType.Integer,                    //  123 012 0x1ac
             TokenType.String,                     //  "" ''
             TokenType.Variable,                 //  $var_1
+            TokenType.ConstString,                  //   Hello_World
             TokenType.Whitespace,                 //  \t \r \n
         };
         
