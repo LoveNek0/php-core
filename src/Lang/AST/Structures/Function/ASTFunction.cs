@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PHP.Core.Lang.Tokens;
 
 namespace PHP.Core.Lang.AST.Structures.Function
@@ -7,21 +8,16 @@ namespace PHP.Core.Lang.AST.Structures.Function
 
     public class ASTFunction : ASTNode
     {
-        public TokenItem Name => _name;
-        public ASTFunctionArgument[] Arguments => _arguments.ToArray();
-        public TokenItem ReturnType => _returnType;
-        public ASTNode[] Lines => _lines.ToArray();
-
-        internal TokenItem _name;
-        internal List<ASTFunctionArgument> _arguments = new List<ASTFunctionArgument>();
-        internal TokenItem _returnType;
-        internal List<ASTNode> _lines = new List<ASTNode>();
-
+        public readonly ASTNode Name;
+        public readonly ASTFunctionArgument[] Arguments;
+        public readonly TokenItem ReturnType;
+        public readonly ASTNode[] Lines;
+        
         internal ASTFunction(TokenItem token) : base(token)
         {
         }
 
         public override string ToString() =>
-            $"function {_name.Data} ({String.Join(", ", _arguments)}){{\n{String.Join("\n", _lines)}\n}}";
+            $"function {Name} ({String.Join(", ", Arguments.GetEnumerator())}){{\n{String.Join("\n", Lines.GetEnumerator())}\n}}";
     }
 }

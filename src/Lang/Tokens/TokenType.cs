@@ -14,7 +14,7 @@ namespace PHP.Core.Lang.Tokens
         
         [TokenTypePattern(@"((\/\*\*)[\w\W\s\S]*(\*\/))")]
         DocComment,
-        [TokenTypePattern(@"((\/\/(.|\w)*)|((\/\*)[\w\W\s\S]*(\*\/)))")]
+        [TokenTypePattern(@"((\/\/(.|\w)*)|((\/\*)[\w\W\s\S]*?(\*\/)))")]
         Comment,                    //  // /**/
         [TokenTypePattern(@"\s+")]
         Whitespace,
