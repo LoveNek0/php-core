@@ -428,13 +428,12 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(NextToken(), left, ParseConcat());
             return left;
         }
-
-        /*
-         * TODO: Исправить принадлежность указателя на функцию
-         */
+        
         private ASTNode ParseObjectAccessOperator()
         {
             ASTNode left = ParseSign();
+            if (IsMatch(TokenType.BraceOpen))
+                left = ParseFunctionCall(left);
             if(left.Token.Type == TokenType.Variable || left.Token.Type == TokenType.ConstString)
                 while (IsMatch(TokenType.ObjectOperator, TokenType.NullsafeObjectOperator, TokenType.DoubleColon))
                 {
@@ -449,26 +448,20 @@ namespace PHP.Core.Lang
                     else
                     {
                         GetToken(TokenType.ConstString, TokenType.Variable);
-                        right = ParseFunctionCall();
+                        right = ParseSign();
                     }
 
                     left = new ASTBinary(token, left, right);
+                    if (IsMatch(TokenType.BraceOpen))
+                        left = ParseFunctionCall(left);
                 }
 
             return left;
         }
         
-        private ASTNode ParseSign()
+        private ASTNode ParseFunctionCall(ASTNode node)
         {
-            if (IsMatch(TokenType.Add, TokenType.Sub))
-                return new ASTUnary(NextToken(), ParseSign(), ASTUnary.OperatorSide.Left);
-            return ParseFunctionCall();
-        }
-
-        private ASTNode ParseFunctionCall()
-        {
-            ASTNode left = ParsePrimary();
-            if (left.Token.Type != TokenType.Integer && left.Token.Type != TokenType.Float && IsMatch(TokenType.BraceOpen))
+            if (node.Token.Type != TokenType.Integer && node.Token.Type != TokenType.Float && IsMatch(TokenType.BraceOpen))
             {
                 TokenItem token = NextToken(TokenType.BraceOpen);
 
@@ -480,9 +473,16 @@ namespace PHP.Core.Lang
                         NextToken(TokenType.Comma);
                 }
                 NextToken(TokenType.BraceClose);
-                left = new ASTFunctionCall(token, left, @params.ToArray());
+                node = new ASTFunctionCall(token, node, @params.ToArray());
             }
-            return left;
+            return node;
+        }
+        
+        private ASTNode ParseSign()
+        {
+            if (IsMatch(TokenType.Add, TokenType.Sub))
+                return new ASTUnary(NextToken(), ParseSign(), ASTUnary.OperatorSide.Left);
+            return ParsePrimary();
         }
 
         private ASTNode ParsePrimary()

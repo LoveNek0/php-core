@@ -15,6 +15,6 @@ namespace PHP.Core.Lang.AST.Structures.Function
             Params = @params;
         }
 
-        public override string ToString() => $"( {Name}({String.Join(", ", Params.Select(item => item.ToString()))}) )";
+        public override string ToString() => $"[{Name}({String.Join(", ", Params.Select(item => item.ToString()))})]";
     }
 }
