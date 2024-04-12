@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.AST.Operators;
 using PHP.Core.Lang.AST.Structures;
 using PHP.Core.Lang.AST.Structures.Function;
@@ -116,7 +117,7 @@ namespace PHP.Core.Lang
                 return ParseFunction();
 
             */
-            if (IsMatch(TokenType.Variable))
+            if (IsMatch(TokenType.Variable, TokenType.ConstString))
             {
                 ASTNode node = ParseExpression();
                 NextToken(TokenType.Semicolon);
@@ -359,26 +360,6 @@ namespace PHP.Core.Lang
 
             return left;
         }
-
-        private ASTNode ParseComparison()
-        {
-            ASTNode left = ParseAddition();
-            if (IsMatch(
-                    TokenType.T_IS_EQUAL,
-                    TokenType.T_IS_NOT_EQUAL,
-                    TokenType.T_IS_SMALLER,
-                    TokenType.T_IS_SMALLER_OR_EQUAL,
-                    TokenType.T_IS_GREATER,
-                    TokenType.T_IS_GREATER_OR_EQUAL
-                ))
-            {
-                TokenItem token = NextToken();
-                ASTNode right = ParseComparison();
-                left = new ASTBinary(token, left, right);
-            }
-
-            return left;
-        }
         */
         
         private ASTNode ParseNullCoalesceOperator()
@@ -423,15 +404,35 @@ namespace PHP.Core.Lang
 
         private ASTNode ParseConcat()
         {
-            ASTNode left = ParseObjectAccessOperator();
+            ASTNode left = ParseComparison();
             if (IsMatch(TokenType.Concat))
                 left = new ASTBinary(NextToken(), left, ParseConcat());
+            return left;
+        }
+
+        private ASTNode ParseComparison()
+        {
+            ASTNode left = ParseObjectAccessOperator();
+            if (IsMatch(
+                    TokenType.IsEqual,
+                    TokenType.IsNotEqual,
+                    TokenType.IsSpaceship,
+                    TokenType.IsGreater,
+                    TokenType.IsSmaller,
+                    TokenType.IsGreaterOrEqual,
+                    TokenType.IsSmallerOrEqual
+                ))
+            {
+                TokenItem token = NextToken();
+                ASTNode right = ParseComparison();
+                left = new ASTBinary(token, left, right);
+            }
             return left;
         }
         
         private ASTNode ParseObjectAccessOperator()
         {
-            ASTNode left = ParseSign();
+            ASTNode left = ParseLeftSideUnaryOperators();
             if (IsMatch(TokenType.BraceOpen))
                 left = ParseFunctionCall(left);
             if(left.Token.Type == TokenType.Variable || left.Token.Type == TokenType.ConstString)
@@ -448,7 +449,7 @@ namespace PHP.Core.Lang
                     else
                     {
                         GetToken(TokenType.ConstString, TokenType.Variable);
-                        right = ParseSign();
+                        right = ParseLeftSideUnaryOperators();
                     }
 
                     left = new ASTBinary(token, left, right);
@@ -478,10 +479,10 @@ namespace PHP.Core.Lang
             return node;
         }
         
-        private ASTNode ParseSign()
+        private ASTNode ParseLeftSideUnaryOperators()
         {
-            if (IsMatch(TokenType.Add, TokenType.Sub))
-                return new ASTUnary(NextToken(), ParseSign(), ASTUnary.OperatorSide.Left);
+            if (IsMatch(TokenType.Add, TokenType.Sub, TokenType.Not, TokenType.Negation))
+                return new ASTUnary(NextToken(), ParseLeftSideUnaryOperators(), ASTUnary.OperatorSide.Left);
             return ParsePrimary();
         }
 

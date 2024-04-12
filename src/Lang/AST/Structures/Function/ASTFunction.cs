@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
 namespace PHP.Core.Lang.AST.Structures.Function

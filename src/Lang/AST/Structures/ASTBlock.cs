@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PHP.Core.Lang.AST.Base;
 
 namespace PHP.Core.Lang.AST
 {

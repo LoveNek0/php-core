@@ -56,12 +56,14 @@ namespace PHP.Core.Lang
             TokenType.AssignmentBitNot,           //  |=
             TokenType.LogicalOr,                  //  || or
             TokenType.BitNot,                     //  |
+            TokenType.Negation,                   //  ~
             TokenType.AssignmentBitShiftLeft,     //  <<=
             TokenType.BitShiftLeft,               //  <<
             TokenType.IsSpaceship,                //  <=>
             TokenType.IsSmallerOrEqual,           //  <=
             TokenType.IsNotIdentical,             //  !==
             TokenType.IsNotEqual,                 //  != <>
+            TokenType.Not,                        //  !
             TokenType.IsSmaller,                  // <
             TokenType.AssignmentBitShiftRight,    //  >>=
             TokenType.BitShiftRight,              //  >>

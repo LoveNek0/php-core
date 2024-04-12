@@ -44,6 +44,8 @@ namespace PHP.Core.Lang.Tokens
         [TokenTypePattern(@"[\]]")]
         SquareBraceClose,           //  ]
         
+        [TokenTypePattern(@"[!]")]
+        Not,                         //  !
         [TokenTypePattern(@"[+]")]
         Add,                        //  +
         [TokenTypePattern(@"[-]")]
@@ -86,6 +88,8 @@ namespace PHP.Core.Lang.Tokens
         BitShiftLeft,               //  <<
         [TokenTypePattern(@"[>][>]")]
         BitShiftRight,              //  >>
+        [TokenTypePattern(@"[~]")]
+        Negation,                  //  ~
 
         [TokenTypePattern(@"[&][=]")]
         AssignmentBitAnd,           //  &=
