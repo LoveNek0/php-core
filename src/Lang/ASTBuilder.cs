@@ -117,7 +117,7 @@ namespace PHP.Core.Lang
                 return ParseFunction();
 
             */
-            if (IsMatch(TokenType.Variable, TokenType.ConstString))
+            if (IsMatch(TokenType.Variable, TokenType.ConstString, TokenType.Increment, TokenType.Decrement))
             {
                 ASTNode node = ParseExpression();
                 NextToken(TokenType.Semicolon);
@@ -412,7 +412,7 @@ namespace PHP.Core.Lang
 
         private ASTNode ParseComparison()
         {
-            ASTNode left = ParseObjectAccessOperator();
+            ASTNode left = ParseIncDecUnaryOperators();
             if (IsMatch(
                     TokenType.IsEqual,
                     TokenType.IsNotEqual,
@@ -426,6 +426,32 @@ namespace PHP.Core.Lang
                 TokenItem token = NextToken();
                 ASTNode right = ParseComparison();
                 left = new ASTBinary(token, left, right);
+            }
+            return left;
+        }
+        
+        private ASTNode ParseIncDecUnaryOperators()
+        {
+            if (IsMatch(TokenType.Increment, TokenType.Decrement))
+            {
+                TokenItem token = NextToken();
+                ASTNode right = ParseObjectAccessOperator();       
+                if (right.Token.Type != TokenType.Variable &&
+                    right.Token.Type != TokenType.ObjectOperator &&
+                    right.Token.Type != TokenType.NullsafeObjectOperator &&
+                    right.Token.Type != TokenType.DoubleColon)
+                    throw new SyntaxException("Unexpected token after increment/decrement operator", NextToken());
+                return new ASTUnary(token, right, ASTUnary.OperatorSide.Left);
+            }
+            ASTNode left = ParseObjectAccessOperator();
+            if (IsMatch(TokenType.Increment, TokenType.Decrement))
+            {
+                if (left.Token.Type != TokenType.Variable &&
+                    left.Token.Type != TokenType.ObjectOperator &&
+                    left.Token.Type != TokenType.NullsafeObjectOperator &&
+                    left.Token.Type != TokenType.DoubleColon)
+                    throw new SyntaxException("Unexpected token before increment/decrement operator", NextToken());
+                return new ASTUnary(NextToken(), left, ASTUnary.OperatorSide.Right);
             }
             return left;
         }
