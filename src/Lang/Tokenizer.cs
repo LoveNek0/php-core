@@ -18,6 +18,13 @@ namespace PHP.Core.Lang
             TokenType.OpenTagWithEcho,         //  <?= <%=
             TokenType.OpenTag,                 //  <? <?php <%
             TokenType.CloseTag,                 //  ?> %>
+            TokenType.BoolCast,                  //  (bool)(boolean)
+            TokenType.IntCast,                  //  (int)(integer)
+            TokenType.FloatCast,                 //  (float)(real)(double)
+            TokenType.ArrayCast,                  //  (array)
+            TokenType.ObjectCast,                 //  (object)
+            TokenType.StringCast,                 //  (string)
+            TokenType.UnsetCast,                 //  (unset)
             TokenType.Comma,                      //  ,
             TokenType.Semicolon,                  //  ;
             TokenType.DoubleColon,                  //  ::

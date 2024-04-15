@@ -1,8 +1,6 @@
 <?php
-$number = 5;
---$number::Array()->value; // Увеличиваем $number на 1
-$number = 10;
-$number--; // Уменьшаем $number на 1
+
+$a = (EXAMPLE)CLAZZ::$d->F++;
 
 /*
 $a = 1 + 2 - 3 * 4 + (5 * 3 % 1 - 6 * 7 ** 10) + (8 - 9);

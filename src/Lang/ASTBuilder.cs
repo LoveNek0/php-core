@@ -412,7 +412,7 @@ namespace PHP.Core.Lang
 
         private ASTNode ParseComparison()
         {
-            ASTNode left = ParseIncDecUnaryOperators();
+            ASTNode left = ParseTypeChangingOperator();
             if (IsMatch(
                     TokenType.IsEqual,
                     TokenType.IsNotEqual,
@@ -428,6 +428,33 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(token, left, right);
             }
             return left;
+        }
+        
+        private ASTNode ParseTypeChangingOperator()
+        {
+            if (IsMatch(TokenType.BoolCast,
+                    TokenType.IntCast,
+                    TokenType.FloatCast,
+                    TokenType.StringCast,
+                    TokenType.ArrayCast,
+                    TokenType.ObjectCast,
+                    TokenType.UnsetCast))
+            {
+                TokenItem token = NextToken();
+                ASTNode right = ParseIncDecUnaryOperators();
+                return new ASTUnary(token, right, ASTUnary.OperatorSide.Left);
+            }
+
+            if (IsMatch(TokenType.BraceOpen) && IsMatch(1, TokenType.ConstString) && IsMatch(2, TokenType.BraceClose))
+            {
+                NextToken(TokenType.BraceOpen);
+                TokenItem token = NextToken(TokenType.ConstString);
+                NextToken(TokenType.BraceClose);
+                ASTNode right = ParseIncDecUnaryOperators();
+                return new ASTUnary(token, right, ASTUnary.OperatorSide.Left);
+            }
+
+            return ParseIncDecUnaryOperators();
         }
         
         private ASTNode ParseIncDecUnaryOperators()

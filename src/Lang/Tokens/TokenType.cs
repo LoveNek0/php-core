@@ -213,14 +213,20 @@ namespace PHP.Core.Lang.Tokens
         DoubleArrow,             //  =>
 
         //  Casting
+        [TokenTypePattern(@"[(]\s*(([Ii][Nn][Tt])|([Ii][Nn][Tt][Ee][Gg][Ee][Rr]))\s*[)]")]
         IntCast,                 //  (int) (integer)
-        DoubleCast,              //  (real) (double) (float)
+        [TokenTypePattern(@"[(]\s*(([Rr][Ee][Aa][Ll])|([Dd][Oo][Uu][Bb][Ll][Ee])|([Ff][Ll][Oo][Aa][Tt]))\s*[)]")]
+        FloatCast,              //  (real) (double) (float)
+        [TokenTypePattern(@"[(]\s*([Ss][Tt][Rr][Ii][Nn][Gg])\s*[)]")]
         StringCast,              //  (string)
+        [TokenTypePattern(@"[(]\s*(([Bb][Oo][Oo][Ll])|([Bb][Oo][Oo][Ll][Ee][Aa][Nn]))\s*[)]")]
         BoolCast,                //  (bool) (boolean)
+        [TokenTypePattern(@"[(]\s*([Aa][Rr][Rr][Aa][Yy])\s*[)]")]
         ArrayCast,               //  (array)
+        [TokenTypePattern(@"[(]\s*([Oo][Bb][Jj][Ee][Cc][Tt])\s*[)]")]
         ObjectCast,              //  (object)
+        [TokenTypePattern(@"[(]\s*([Uu][Nn][Ss][Ee][Tt])\s*[)]")]
         UnsetCast,               //  (unset)
-        CustomTypeCast,         //  (CustomType)
 
         //  Cycles
         Do,                       //  do
