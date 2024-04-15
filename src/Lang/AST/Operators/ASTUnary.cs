@@ -23,6 +23,6 @@ namespace PHP.Core.Lang.AST.Operators
             Side = side;
         }
 
-        public override string ToString() => $"({(Side == OperatorSide.Left ? Token.Data : "")}{Operand}{(Side == OperatorSide.Right ? Token.Data : "")})";
+        public override string ToString() => $"({(Side == OperatorSide.Left ? Token.Data : "")} {Operand} {(Side == OperatorSide.Right ? Token.Data : "")})";
     }
 }

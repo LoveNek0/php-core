@@ -412,7 +412,7 @@ namespace PHP.Core.Lang
 
         private ASTNode ParseComparison()
         {
-            ASTNode left = ParseTypeChangingOperator();
+            ASTNode left = ParseInstanceOfOperator();
             if (IsMatch(
                     TokenType.IsEqual,
                     TokenType.IsNotEqual,
@@ -425,6 +425,50 @@ namespace PHP.Core.Lang
             {
                 TokenItem token = NextToken();
                 ASTNode right = ParseComparison();
+                left = new ASTBinary(token, left, right);
+            }
+            return left;
+        }
+
+        private ASTNode ParseInstanceOfOperator()
+        {
+            ASTNode left = ParseTypeChangingOperator();
+            if (IsMatch(TokenType.InstanceOf))
+            {
+                if(left.Token.Type != TokenType.BoolCast &&
+                   left.Token.Type != TokenType.IntCast &&
+                   left.Token.Type != TokenType.FloatCast &&
+                   left.Token.Type != TokenType.StringCast &&
+                   left.Token.Type != TokenType.ArrayCast &&
+                   left.Token.Type != TokenType.ObjectCast &&
+                   left.Token.Type != TokenType.UnsetCast &&
+                   left.Token.Type != TokenType.Variable &&
+                   left.Token.Type != TokenType.ConstString &&
+                   left.Token.Type != TokenType.ObjectOperator &&
+                   left.Token.Type != TokenType.NullsafeObjectOperator &&
+                   left.Token.Type != TokenType.DoubleColon &&
+                   left.Token.Type != TokenType.New &&
+                   left.Token.Type != TokenType.Clone) 
+                    throw new SyntaxException($"Unexpected token \"{left.Token.Type}\" before instance", left.Token);
+                TokenItem token = NextToken();
+                ASTNode right;
+                if (IsMatch(TokenType.BraceOpen))
+                {
+                    NextToken(TokenType.BraceOpen);
+                    right = ParseExpression();
+                    NextToken(TokenType.BraceClose);
+                }
+                else
+                {
+                    right = ParseIncDecUnaryOperators();
+                    if(right.Token.Type != TokenType.Variable &&
+                       right.Token.Type != TokenType.ConstString &&
+                       right.Token.Type != TokenType.ObjectOperator &&
+                       right.Token.Type != TokenType.NullsafeObjectOperator &&
+                       right.Token.Type != TokenType.DoubleColon) 
+                        throw new SyntaxException($"Unexpected token \"{right.Token.Type}\" after instance", right.Token);
+                }
+
                 left = new ASTBinary(token, left, right);
             }
             return left;
@@ -470,7 +514,7 @@ namespace PHP.Core.Lang
                     throw new SyntaxException("Unexpected token after increment/decrement operator", NextToken());
                 return new ASTUnary(token, right, ASTUnary.OperatorSide.Left);
             }
-            ASTNode left = ParseObjectAccessOperator();
+            ASTNode left = ParseCloneNewOperator();
             if (IsMatch(TokenType.Increment, TokenType.Decrement))
             {
                 if (left.Token.Type != TokenType.Variable &&
@@ -481,6 +525,34 @@ namespace PHP.Core.Lang
                 return new ASTUnary(NextToken(), left, ASTUnary.OperatorSide.Right);
             }
             return left;
+        }
+        
+        private ASTNode ParseCloneNewOperator()
+        {
+            if (IsMatch(TokenType.Clone, TokenType.New))
+            {
+                TokenItem token = NextToken();
+                ASTNode right;
+                if (IsMatch(TokenType.BraceOpen))
+                {
+                    NextToken(TokenType.BraceOpen);
+                    right = ParseExpression();
+                    NextToken(TokenType.BraceClose);
+                }
+                else
+                {
+                    right = ParseObjectAccessOperator();
+                    if(right.Token.Type != TokenType.Variable &&
+                       right.Token.Type != TokenType.ConstString &&
+                       right.Token.Type != TokenType.ObjectOperator &&
+                       right.Token.Type != TokenType.NullsafeObjectOperator &&
+                       right.Token.Type != TokenType.DoubleColon)
+                        throw new SyntaxException("Unexpected token after clone/new operator", NextToken());
+                }
+                return new ASTUnary(token, right, ASTUnary.OperatorSide.Left);
+            }
+
+            return ParseObjectAccessOperator();
         }
         
         private ASTNode ParseObjectAccessOperator()
@@ -538,7 +610,7 @@ namespace PHP.Core.Lang
                 return new ASTUnary(NextToken(), ParseLeftSideUnaryOperators(), ASTUnary.OperatorSide.Left);
             return ParsePrimary();
         }
-
+        
         private ASTNode ParsePrimary()
         {
             if (IsMatch(TokenType.BraceOpen))

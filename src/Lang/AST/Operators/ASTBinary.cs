@@ -21,6 +21,6 @@ namespace PHP.Core.Lang.AST.Operators
             _right = right;
         }
 
-        public override string ToString() => $"({Left}{Token.Data}{Right})";
+        public override string ToString() => $"({Left} {Token.Data} {Right})";
     }
 }

@@ -25,6 +25,9 @@ namespace PHP.Core.Lang
             TokenType.ObjectCast,                 //  (object)
             TokenType.StringCast,                 //  (string)
             TokenType.UnsetCast,                 //  (unset)
+            TokenType.InstanceOf,                //  instanceof
+            TokenType.New,                       //  new
+            TokenType.Clone,                    //  clone
             TokenType.Comma,                      //  ,
             TokenType.Semicolon,                  //  ;
             TokenType.DoubleColon,                  //  ::

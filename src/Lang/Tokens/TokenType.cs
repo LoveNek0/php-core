@@ -189,7 +189,7 @@ namespace PHP.Core.Lang.Tokens
         ObjectOperator,          //  ->
         [TokenTypePattern(@"[?][-][>]")]
         NullsafeObjectOperator, //  ?->
-        [TokenTypePattern(@"[&]")]
+        [TokenTypePattern(@"\b[Cc][Ll][Oo][Nn][Ee]\b")]
         Clone,                    //  clone
         [TokenTypePattern(@"[&]")]
         Extends,                  //  extends
@@ -197,11 +197,11 @@ namespace PHP.Core.Lang.Tokens
         Implements,               //  implements
         [TokenTypePattern(@"[&]")]
         Final,                    //  final
-        [TokenTypePattern(@"[&]")]
+        [TokenTypePattern(@"\b[Ii][Nn][Ss][Tt][Aa][Nn][Cc][Ee][Oo][Ff]\b")]
         InstanceOf,               //  instanceof
         [TokenTypePattern(@"[&]")]
         InsteadOf,                //  insteadof
-        [TokenTypePattern(@"[&]")]
+        [TokenTypePattern(@"\b[Nn][Ee][Ww]\b")]
         New,                      //  new
         [TokenTypePattern(@"[&]")]
         Query,                    //  ?
