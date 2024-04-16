@@ -291,12 +291,12 @@ namespace PHP.Core.Lang
         //  Expression
         private ASTNode ParseExpression()
         {
-            return ParseAssignment();
+            return ParseAssignmentOperator();
         }
 
-        private ASTNode ParseAssignment()
+        private ASTNode ParseAssignmentOperator()
         {
-            ASTNode left = ParseComparisonEqualsOperator();
+            ASTNode left = ParseLogicalOperator();
 
             if (IsMatch(
                     TokenType.Assignment,
@@ -318,7 +318,7 @@ namespace PHP.Core.Lang
 
                 if (left.Token.Type == TokenType.Variable)
                 {
-                    ASTNode right = ParseAssignment();
+                    ASTNode right = ParseAssignmentOperator();
                     left = new ASTBinary(token, left, right);
                 }
                 else
@@ -327,40 +327,34 @@ namespace PHP.Core.Lang
 
             return left;
         }
-
-        /*
-        private ASTNode ParseLogical()
+/*
+        private ASTNode ParseTernaryOperator()
         {
-            ASTNode left = ParseBitwise();
-
-            while (IsMatch(TokenType.T_LOGICAL_AND, TokenType.T_LOGICAL_OR, TokenType.T_LOGICAL_XOR))
+            ASTNode left = ParseLogicalOperator();
+            if (IsMatch(TokenType.Colon))
             {
-                TokenItem token = NextToken();
-                ASTNode right = ParseBitwise();
-                left = new ASTBinary(token, left, right);
+                NextToken(TokenType.Colon);
+                ASTNode _true = ParseExpression()
             }
+        }
+*/
+        private ASTNode ParseLogicalOperator()
+        {
+            ASTNode left = ParseBitwiseOperator();
+
+            if(IsMatch(TokenType.LogicalAnd, TokenType.LogicalOr, TokenType.LogicalXor))
+                left = new ASTBinary(NextToken(), left, ParseLogicalOperator());
 
             return left;
         }
-        private ASTNode ParseBitwise()
+        
+        private ASTNode ParseBitwiseOperator()
         {
-            ASTNode left = ParseComparison();
-
-            if (IsMatch(
-                    TokenType.T_BIT_AND,
-                    TokenType.T_BIT_XOR,
-                    TokenType.T_BIT_NOT,
-                    TokenType.T_BIT_SHIFT_LEFT,
-                    TokenType.T_BIT_SHIFT_RIGHT))
-            {
-                TokenItem token = NextToken();
-                ASTNode right = ParseBitwise();
-                left = new ASTBinary(token, left, right);
-            }
-
+            ASTNode left = ParseComparisonEqualsOperator();
+            if (IsMatch(TokenType.BitAnd, TokenType.BitNot, TokenType.BitXor, TokenType.BitShiftLeft, TokenType.BitShiftRight))
+                left = new ASTBinary(NextToken(), left, ParseBitwiseOperator());
             return left;
         }
-        */
         
         private ASTNode ParseComparisonEqualsOperator()
         {
