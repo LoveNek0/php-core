@@ -1,6 +1,6 @@
 <?php
 
-$a = (EXAMPLE) new CLAZZ::$d->F instanceof CLAZZ;
+$a = 1 + 2 - 3 < $b * 4 - 5 == !$c;
 
 /*
 $a = 1 + 2 - 3 * 4 + (5 * 3 % 1 - 6 * 7 ** 10) + (8 - 9);

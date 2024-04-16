@@ -296,7 +296,7 @@ namespace PHP.Core.Lang
 
         private ASTNode ParseAssignment()
         {
-            ASTNode left = ParseNullCoalesceOperator();
+            ASTNode left = ParseComparisonEqualsOperator();
 
             if (IsMatch(
                     TokenType.Assignment,
@@ -362,6 +362,37 @@ namespace PHP.Core.Lang
         }
         */
         
+        private ASTNode ParseComparisonEqualsOperator()
+        {
+            ASTNode left = ParseComparisonSizeOperator();
+            if (IsMatch(TokenType.IsEqual,
+                    TokenType.IsNotEqual,
+                    TokenType.IsSpaceship
+                ))
+            {
+                TokenItem token = NextToken();
+                ASTNode right = ParseComparisonSizeOperator();
+                left = new ASTBinary(token, left, right);
+            }
+            return left;
+        }
+
+        private ASTNode ParseComparisonSizeOperator()
+        {
+            ASTNode left = ParseNullCoalesceOperator();
+            if (IsMatch(TokenType.IsGreater,
+                    TokenType.IsSmaller,
+                    TokenType.IsGreaterOrEqual,
+                    TokenType.IsSmallerOrEqual
+                ))
+            {
+                TokenItem token = NextToken();
+                ASTNode right = ParseNullCoalesceOperator();
+                left = new ASTBinary(token, left, right);
+            }
+            return left;
+        }
+        
         private ASTNode ParseNullCoalesceOperator()
         {
             ASTNode left = ParseAddition();
@@ -404,29 +435,9 @@ namespace PHP.Core.Lang
 
         private ASTNode ParseConcat()
         {
-            ASTNode left = ParseComparison();
+            ASTNode left = ParseInstanceOfOperator();
             if (IsMatch(TokenType.Concat))
                 left = new ASTBinary(NextToken(), left, ParseConcat());
-            return left;
-        }
-
-        private ASTNode ParseComparison()
-        {
-            ASTNode left = ParseInstanceOfOperator();
-            if (IsMatch(
-                    TokenType.IsEqual,
-                    TokenType.IsNotEqual,
-                    TokenType.IsSpaceship,
-                    TokenType.IsGreater,
-                    TokenType.IsSmaller,
-                    TokenType.IsGreaterOrEqual,
-                    TokenType.IsSmallerOrEqual
-                ))
-            {
-                TokenItem token = NextToken();
-                ASTNode right = ParseComparison();
-                left = new ASTBinary(token, left, right);
-            }
             return left;
         }
 
