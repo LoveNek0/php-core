@@ -28,6 +28,8 @@ namespace PHP.Core.Lang
             TokenType.InstanceOf,                //  instanceof
             TokenType.New,                       //  new
             TokenType.Clone,                    //  clone
+            TokenType.Echo,                     //  echo
+            TokenType.Print,                     //  print
             TokenType.Comma,                      //  ,
             TokenType.Semicolon,                  //  ;
             TokenType.DoubleColon,                  //  ::

@@ -117,9 +117,9 @@ namespace PHP.Core.Lang
                 return ParseFunction();
 
             */
-            if (IsMatch(TokenType.Variable, TokenType.ConstString, TokenType.Increment, TokenType.Decrement))
+            if (IsMatch(TokenType.Variable, TokenType.ConstString, TokenType.Increment, TokenType.Decrement, TokenType.Echo, TokenType.Print))
             {
-                ASTNode node = ParseExpression();
+                ASTNode node = ParseEchoOperator();
                 NextToken(TokenType.Semicolon);
                 return node;
             }
@@ -288,6 +288,22 @@ namespace PHP.Core.Lang
         }
         */
 
+        //  Constructions
+        
+        //  Const operators
+        private ASTNode ParseEchoOperator()
+        {
+            if (IsMatch(TokenType.Echo))
+                return new ASTUnary(NextToken(), ParsePrintOperator(), ASTUnary.OperatorSide.Left);
+            return ParseExpression();
+        }
+        private ASTNode ParsePrintOperator()
+        {
+            if (IsMatch(TokenType.Print))
+                return new ASTUnary(NextToken(), ParsePrintOperator(), ASTUnary.OperatorSide.Left);
+            return ParseExpression();
+        }
+        
         //  Expression
         private ASTNode ParseExpression()
         {

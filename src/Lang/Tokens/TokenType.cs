@@ -272,7 +272,11 @@ namespace PHP.Core.Lang.Tokens
 
         //  Language Constructions
         Const,                    //  const
+        [TokenTypePattern(@"\b[Ee][Cc][Hh][Oo]\b")]
         Echo,                     //  echo
+        [TokenTypePattern(@"\b[Pp][Rr][Ii][Nn][Tt]\b")]
+        Print,                    //  print
+        
         Match,                    //  match
         Global,                   //  global
         Declare,                  //  declare
