@@ -203,7 +203,7 @@ namespace PHP.Core.Lang.Tokens
         InsteadOf,                //  insteadof
         [TokenTypePattern(@"\b[Nn][Ee][Ww]\b")]
         New,                      //  new
-        [TokenTypePattern(@"[&]")]
+        [TokenTypePattern(@"[?]")]
         Query,                    //  ?
         [TokenTypePattern(@"[&]")]
         Attribute,                                //  attribytes

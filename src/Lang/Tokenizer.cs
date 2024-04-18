@@ -83,6 +83,7 @@ namespace PHP.Core.Lang
             TokenType.AssignmentCoalesce,         //  ??=
             TokenType.Coalesce,                   //  ??
             TokenType.NullsafeObjectOperator,       //  ?->
+            TokenType.Query,                      //  ?
             TokenType.Float,                      //  1.5
             TokenType.Integer,                    //  123 012 0x1ac
             TokenType.String,                     //  "" ''

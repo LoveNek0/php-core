@@ -10,15 +10,13 @@ namespace PHP.Core.Lang.AST.Operators
 {
     public class ASTBinary : ASTNode
     {
-        public ASTNode Left => _left;
-        public ASTNode Right => _right;
+        public readonly ASTNode Left;
+        public readonly ASTNode Right;
 
-        internal ASTNode _left;
-        internal ASTNode _right;
         internal ASTBinary(TokenItem token, ASTNode left = null, ASTNode right = null) : base(token)
         {
-            _left = left;
-            _right = right;
+            Left = left;
+            Right = right;
         }
 
         public override string ToString() => $"({Left} {Token.Data} {Right})";

@@ -293,10 +293,9 @@ namespace PHP.Core.Lang
         {
             return ParseAssignmentOperator();
         }
-
         private ASTNode ParseAssignmentOperator()
         {
-            ASTNode left = ParseLogicalOperator();
+            ASTNode left = ParseTernaryOperator();
 
             if (IsMatch(
                     TokenType.Assignment,
@@ -327,17 +326,20 @@ namespace PHP.Core.Lang
 
             return left;
         }
-/*
         private ASTNode ParseTernaryOperator()
         {
             ASTNode left = ParseLogicalOperator();
-            if (IsMatch(TokenType.Colon))
+            if (IsMatch(TokenType.Query))
             {
-                NextToken(TokenType.Colon);
-                ASTNode _true = ParseExpression()
+                TokenItem firstToken = NextToken(TokenType.Query);
+                ASTNode _true = ParseExpression();
+                TokenItem secondToken = NextToken(TokenType.Colon);
+                ASTNode _false = ParseExpression();
+                return new ASTTernary(firstToken, secondToken, left, _true, _false);
             }
+
+            return left;
         }
-*/
         private ASTNode ParseLogicalOperator()
         {
             ASTNode left = ParseBitwiseOperator();
@@ -347,7 +349,6 @@ namespace PHP.Core.Lang
 
             return left;
         }
-        
         private ASTNode ParseBitwiseOperator()
         {
             ASTNode left = ParseComparisonEqualsOperator();
@@ -355,7 +356,6 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(NextToken(), left, ParseBitwiseOperator());
             return left;
         }
-        
         private ASTNode ParseComparisonEqualsOperator()
         {
             ASTNode left = ParseComparisonSizeOperator();
@@ -370,7 +370,6 @@ namespace PHP.Core.Lang
             }
             return left;
         }
-
         private ASTNode ParseComparisonSizeOperator()
         {
             ASTNode left = ParseNullCoalesceOperator();
@@ -386,7 +385,6 @@ namespace PHP.Core.Lang
             }
             return left;
         }
-        
         private ASTNode ParseNullCoalesceOperator()
         {
             ASTNode left = ParseAddition();
@@ -394,7 +392,6 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(NextToken(), left, ParseExpression());
             return left;
         }
-        
         private ASTNode ParseAddition()
         {
             ASTNode left = ParseMultiplication();
@@ -402,7 +399,6 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(NextToken(), left, ParseAddition());
             return left;
         }
-
         private ASTNode ParseMultiplication()
         {
             ASTNode left = ParseMod();
@@ -410,7 +406,6 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(NextToken(), left, ParseMultiplication());
             return left;
         }
-
         private ASTNode ParseMod()
         {
             ASTNode left = ParsePow();
@@ -418,7 +413,6 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(NextToken(), left, ParseMod());
             return left;
         }
-
         private ASTNode ParsePow()
         {
             ASTNode left = ParseConcat();
@@ -426,7 +420,6 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(NextToken(), left, ParsePow());
             return left;
         }
-
         private ASTNode ParseConcat()
         {
             ASTNode left = ParseInstanceOfOperator();
@@ -434,7 +427,6 @@ namespace PHP.Core.Lang
                 left = new ASTBinary(NextToken(), left, ParseConcat());
             return left;
         }
-
         private ASTNode ParseInstanceOfOperator()
         {
             ASTNode left = ParseTypeChangingOperator();
@@ -478,7 +470,6 @@ namespace PHP.Core.Lang
             }
             return left;
         }
-        
         private ASTNode ParseTypeChangingOperator()
         {
             if (IsMatch(TokenType.BoolCast,
@@ -505,7 +496,6 @@ namespace PHP.Core.Lang
 
             return ParseIncDecUnaryOperators();
         }
-        
         private ASTNode ParseIncDecUnaryOperators()
         {
             if (IsMatch(TokenType.Increment, TokenType.Decrement))
@@ -531,7 +521,6 @@ namespace PHP.Core.Lang
             }
             return left;
         }
-        
         private ASTNode ParseCloneNewOperator()
         {
             if (IsMatch(TokenType.Clone, TokenType.New))
@@ -559,7 +548,6 @@ namespace PHP.Core.Lang
 
             return ParseObjectAccessOperator();
         }
-        
         private ASTNode ParseObjectAccessOperator()
         {
             ASTNode left = ParseLeftSideUnaryOperators();
@@ -589,7 +577,6 @@ namespace PHP.Core.Lang
 
             return left;
         }
-        
         private ASTNode ParseFunctionCall(ASTNode node)
         {
             if (node.Token.Type != TokenType.Integer && node.Token.Type != TokenType.Float && IsMatch(TokenType.BraceOpen))
@@ -608,14 +595,12 @@ namespace PHP.Core.Lang
             }
             return node;
         }
-        
         private ASTNode ParseLeftSideUnaryOperators()
         {
             if (IsMatch(TokenType.Add, TokenType.Sub, TokenType.Not, TokenType.Negation))
                 return new ASTUnary(NextToken(), ParseLeftSideUnaryOperators(), ASTUnary.OperatorSide.Left);
             return ParsePrimary();
         }
-        
         private ASTNode ParsePrimary()
         {
             if (IsMatch(TokenType.BraceOpen))
