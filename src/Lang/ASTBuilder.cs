@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PHP.Core.Lang.AST.Base;
+using PHP.Core.Lang.AST.Constructions.Function;
 using PHP.Core.Lang.AST.Operators;
 using PHP.Core.Lang.AST.Structures;
 using PHP.Core.Lang.AST.Structures.Function;
@@ -98,28 +99,17 @@ namespace PHP.Core.Lang
         {
             while (IsMatch(TokenType.Semicolon))
                 NextToken();
-
-            /*
-            if (IsMatch(TokenType.If))
-                return ParseIf();
-
-            //  Loops
-            if (IsMatch(TokenType.While))
-                return ParseWhile();
-            if (IsMatch(TokenType.Do))
-                return ParseDoWhile();
-            if (IsMatch(TokenType.For))
-                return ParseFor();
-            if (IsMatch(TokenType.Foreach))
-                return ParseForeach();
-
-            if (IsMatch(TokenType.Function))
-                return ParseFunction();
-
-            */
-            if (IsMatch(TokenType.Variable, TokenType.ConstString, TokenType.Increment, TokenType.Decrement, TokenType.Echo, TokenType.Print))
+            
+            if (IsMatch(
+                    TokenType.Variable, 
+                    TokenType.ConstString, 
+                    TokenType.Increment,
+                    TokenType.Decrement,
+                    TokenType.Echo,
+                    TokenType.Print,
+                    TokenType.Return))
             {
-                ASTNode node = ParseEchoOperator();
+                ASTNode node = ParseSingleOperator();
                 NextToken(TokenType.Semicolon);
                 return node;
             }
@@ -289,13 +279,67 @@ namespace PHP.Core.Lang
         */
 
         //  Constructions
+        /*
+        private ASTNode ParseFunction()
+        {
+            bool isLambda = false;
+            if (IsMatch(TokenType.Function))
+            {
+                isLambda = IsMatch(TokenType.BraceOpen);
+                TokenItem name  = null;
+                if (isLambda)
+                    name = NextToken(TokenType.ConstString);
+                
+                NextToken(TokenType.BraceOpen);
+                List<ASTFunctionArgument> arguments = new List<ASTFunctionArgument>();
+                do
+                {
+                    if (IsMatch(TokenType.BraceClose))
+                        break;
+
+                    TokenItem type = null;
+                    TokenItem sign = null;
+                    TokenItem byDefault = null;
+                    if (IsMatch(
+                            TokenType.TypeBool,
+                            TokenType.TypeInt,
+                            TokenType.TypeFloat,
+                            TokenType.TypeString,
+                            TokenType.TypeArray,
+                            TokenType.TypeObject,
+                            TokenType.ConstString))
+                        type = NextToken();
+                    if (IsMatch(TokenType.BitAnd, TokenType.Ellipsis))
+                        sign = NextToken();
+                    TokenItem variable = NextToken(TokenType.Variable);
+                    if (IsMatch(TokenType.Assignment))
+                    {
+                        NextToken(TokenType.Assignment);
+                        byDefault = NextToken(
+                            TokenType.Null,
+                            TokenType.True,
+                            TokenType.False,
+                            TokenType.Integer,
+                            TokenType.Float,
+                            TokenType.String
+                            );
+                    }
+                    arguments.Add(new ASTFunctionArgument(type, sign, variable, byDefault));
+                } while (IsMatch(TokenType.Comma));
+                NextToken(TokenType.BraceClose);
+                NextToken(TokenType.CurlyBraceOpen);
+
+                NextToken(TokenType.CurlyBraceClose);
+            }
+        }
+*/
         
         //  Const operators
-        private ASTNode ParseEchoOperator()
+        private ASTNode ParseSingleOperator()
         {
-            if (IsMatch(TokenType.Echo))
+            if (IsMatch(TokenType.Echo, TokenType.Return))
                 return new ASTUnary(NextToken(), ParsePrintOperator(), ASTUnary.OperatorSide.Left);
-            return ParseExpression();
+            return ParsePrintOperator();
         }
         private ASTNode ParsePrintOperator()
         {
@@ -311,7 +355,7 @@ namespace PHP.Core.Lang
         }
         private ASTNode ParseAssignmentOperator()
         {
-            ASTNode left = ParseTernaryOperator();
+            ASTNode left = ParseLambdaFunction();
 
             if (IsMatch(
                     TokenType.Assignment,
@@ -341,6 +385,62 @@ namespace PHP.Core.Lang
             }
 
             return left;
+        }
+        private ASTNode ParseLambdaFunction()
+        {
+            if (IsMatch(TokenType.Function))
+            {
+                TokenItem token = NextToken();
+                NextToken(TokenType.BraceOpen);
+                List<ASTLambdaFunctionArgument> arguments = new List<ASTLambdaFunctionArgument>();
+                do
+                {
+                    if (IsMatch(TokenType.BraceClose))
+                        break;
+                    TokenItem type = IsMatch(
+                        TokenType.TypeCallable,
+                        TokenType.TypeBool,
+                        TokenType.TypeInt,
+                        TokenType.TypeFloat,
+                        TokenType.TypeString,
+                        TokenType.TypeArray,
+                        TokenType.TypeObject,
+                        TokenType.ConstString)
+                        ? NextToken()
+                        : null;
+                    TokenItem pointer = IsMatch(TokenType.BitAnd) ? NextToken() : null;
+                    TokenItem multiParams = IsMatch(TokenType.Ellipsis) ? NextToken() : null;
+                    TokenItem name = NextToken(TokenType.Variable);
+                    arguments.Add(new ASTLambdaFunctionArgument(type, pointer, multiParams, name));
+                } while (IsMatch(TokenType.Comma));
+
+                NextToken(TokenType.BraceClose);
+                List<ASTLambdaFunctionUseArgument> use = new List<ASTLambdaFunctionUseArgument>();
+                if (IsMatch(TokenType.Use))
+                {
+                    NextToken();
+                    NextToken(TokenType.BraceOpen);
+                    do
+                    {
+                        if (IsMatch(TokenType.BraceClose))
+                            break;
+                        TokenItem pointer = IsMatch(TokenType.BitAnd) ? NextToken() : null;
+                        TokenItem name = NextToken(TokenType.Variable);
+                        use.Add(new ASTLambdaFunctionUseArgument(pointer, name));
+                    } while (IsMatch(TokenType.Comma));
+
+                    NextToken(TokenType.BraceClose);
+                }
+
+                NextToken(TokenType.CurlyBraceOpen);
+                List<ASTNode> body = new List<ASTNode>();
+                while (!IsMatch(TokenType.CurlyBraceClose))
+                    body.Add(ParseLine());
+                NextToken(TokenType.CurlyBraceClose);
+                return new ASTLambdaFunction(token, arguments.ToArray(), use.ToArray(), body.ToArray());
+            }
+
+            return ParseTernaryOperator();
         }
         private ASTNode ParseTernaryOperator()
         {
@@ -632,7 +732,10 @@ namespace PHP.Core.Lang
                 TokenType.Float, 
                 TokenType.String,
                 TokenType.Variable,
-                TokenType.ConstString));
+                TokenType.ConstString,
+                TokenType.Null,
+                TokenType.True,
+                TokenType.False));
         }
     }
 }

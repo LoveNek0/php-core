@@ -30,6 +30,23 @@ namespace PHP.Core.Lang
             TokenType.Clone,                    //  clone
             TokenType.Echo,                     //  echo
             TokenType.Print,                     //  print
+            TokenType.TypeMixed,                 //  mixed
+            TokenType.TypeBool,                  //  bool
+            TokenType.TypeCallable,                //  callable
+            TokenType.TypeInt,                       //  int
+            TokenType.TypeFloat,                     //  float
+            TokenType.TypeString,                    //  string
+            TokenType.TypeArray,                     //  array
+            TokenType.TypeObject,                    //  object
+            TokenType.Null,                      //  null
+            TokenType.True,                      //  true
+            TokenType.False,                       //  false
+            TokenType.Use,                       //  use
+            TokenType.Function,                    //  function
+            TokenType.Return,                    //  return
+            TokenType.Static,                    //  static
+            TokenType.Yield,                     //  yield
+            TokenType.YieldFrom,                 //  yield_from
             TokenType.Comma,                      //  ,
             TokenType.Semicolon,                  //  ;
             TokenType.DoubleColon,                  //  ::
@@ -55,6 +72,7 @@ namespace PHP.Core.Lang
             TokenType.Div,                        //  /
             TokenType.AssignmentMod,              //  %=
             TokenType.Mod,                        //  %
+            TokenType.Ellipsis,                  //  ...
             TokenType.AssignmentConcat,           //  .=
             TokenType.Concat,                     //  .
             TokenType.IsIdentical,                //  ===

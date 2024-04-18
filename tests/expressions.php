@@ -1,6 +1,10 @@
 <?php
 
-echo $a = $a && $b == true || $c - 1 ? 123**3 ? 12 : 8 : 4/124;
+$a = function(callable $b) use (&$c){
+    $c += $b();
+    return $c;
+};
+$a(function(){return 1;});
 
 /*
 $a = 1 + 2 - 3 * 4 + (5 * 3 % 1 - 6 * 7 ** 10) + (8 - 9);

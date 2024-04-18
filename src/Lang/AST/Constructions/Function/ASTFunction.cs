@@ -1,20 +1,20 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Structures.Function
+namespace PHP.Core.Lang.AST.Constructions.Function
 {
 
-    public class ASTFunction : ASTNode
+    public class ASTFunction
     {
         public readonly ASTNode Name;
         public readonly ASTFunctionArgument[] Arguments;
         public readonly TokenItem ReturnType;
         public readonly ASTNode[] Lines;
         
-        internal ASTFunction(TokenItem token) : base(token)
+        
+        //  TODO: конструктор и парсинг функций
+        public ASTFunction()
         {
         }
 

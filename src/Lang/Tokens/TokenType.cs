@@ -146,28 +146,50 @@ namespace PHP.Core.Lang.Tokens
         String,                     //  "" ''
         [TokenTypePattern(@"[a-zA-Z_][a-zA-Z0-9_]*")]
         ConstString,               //  HELLO_WORLD
-
+        [TokenTypePattern(@"\b[Nn][Uu][Ll][Ll]\b")]
+        Null,                       //  null
+        [TokenTypePattern(@"\b[Tt][Rr][Uu][Ee]\b")]
+        True,                       //  true
+        [TokenTypePattern(@"\b[Ff][Aa][Ll][Ss][Ee]\b")]
+        False,                      //  false
         [TokenTypePattern(@"([$]+([a-zA-Z_][a-zA-Z0-9_]*))")]
         Variable,                 //  $var_1
+        
 
         //  Function
         [TokenTypePattern(@"\b[Ff][Uu][Nn][Cc][Tt][Ii][Oo][Nn]\b")]
         Function,                 //  function
         [TokenTypePattern(@"\b[Ss][Tt][Aa][Tt][Ii][Cc]\b")]
         Static,                   //  static
-        [TokenTypePattern(@"[Rr][Ee][Tt][Uu][Rr][Nn]")]
+        [TokenTypePattern(@"\b[Rr][Ee][Tt][Uu][Rr][Nn]\b")]
         Return,                   //  return
-        [TokenTypePattern(@"[Yy][Ii][Ee][Ll][Dd]")]
+        [TokenTypePattern(@"\b[Yy][Ii][Ee][Ll][Dd]\b")]
         Yield,                    //  yield
-        [TokenTypePattern(@"[Yy][Ii][Ee][Ll][Dd][_][Ff][Rr][Oo][Mm]")]
+        [TokenTypePattern(@"\b[Yy][Ii][Ee][Ll][Dd][_][Ff][Rr][Oo][Mm]\b")]
         YieldFrom,               //  yield_from
-        [TokenTypePattern(@"[Cc][Aa][Ll][Ll][Aa][Bb][Ll][Ee]")]
-        Callable,                 //  callable
-        [TokenTypePattern(@"[.][.][.]")]
+        [TokenTypePattern(@"\b[.][.][.]\b")]
         Ellipsis,                 //  ...
-        [TokenTypePattern(@"[Ff][Nn]")]
+        [TokenTypePattern(@"\b[Ff][Nn]\b")]
         Fn,                       //  fn
 
+        //  Types
+        [TokenTypePattern(@"\b(([Bb][Oo][Oo][Ll])|([Bb][Oo][Oo][Ll][Ee][Aa][Nn]))\b")]
+        TypeBool,                   //  bool
+        [TokenTypePattern(@"\b[Ii][Nn][Tt]\b")]
+        TypeInt,                    //  int
+        [TokenTypePattern(@"\b(([Ff][Ll][Oo][Aa][Tt])|([Dd][Oo][Uu][Bb][Ll][Ee])|([Rr][Ee][Aa][Ll]))\b")]
+        TypeFloat,                 //  float
+        [TokenTypePattern(@"\b[Ss][Tt][Rr][Ii][Nn][Gg]\b")]
+        TypeString,                //  string
+        [TokenTypePattern(@"\b[Oo][Bb][Jj][Ee][Cc][Tt]\b")]
+        TypeObject,               //  object
+        [TokenTypePattern(@"\b[Aa][Rr][Rr][Aa][Yy]\b")]
+        TypeArray,                //  array
+        [TokenTypePattern(@"\b[Mm][Ii][Xx][Ee][Dd]\b")]
+        TypeMixed,                //  mixed
+        [TokenTypePattern(@"\b[Cc][Aa][Ll][Ll][Aa][Bb][Ll][Ee]\b")]
+        TypeCallable,                 //  callable
+        
         //  Class
         [TokenTypePattern(@"[Aa][Bb][Ss][Tt][Rr][Aa][Cc][Tt]")]
         Abstract,                 //  abstract
@@ -285,6 +307,8 @@ namespace PHP.Core.Lang.Tokens
         //  Namespaces
         Namespace,                //  namespace
         NamespaceName,           //  a\b\c
+        UseStatic,               //  use static]
+        [TokenTypePattern(@"\b[Uu][Ss][Ee]\b")]
         Use,                      //  use
         NamespaceCallName,      //  \a\b\c
 
