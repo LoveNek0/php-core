@@ -1,52 +1,30 @@
 <?php
 
-// Примеры арифметических выражений
-$result1 = 10 + 5; // Ожидаемый результат: 15
-$result2 = 20 - 8; // Ожидаемый результат: 12
-$result3 = 6 * 4;  // Ожидаемый результат: 24
-$result4 = 50 / 2; // Ожидаемый результат: 25
+$result1 = 10 + 5;
+$result2 = 20 - 8;
+$result3 = 6 * 4;
+$result4 = 50 / 2;
 
-// Примеры присваивания
 $a = 10;
-$b = $a + 5; // Ожидаемый результат: $b = 15
+$b = $a + 5;
 
-// Лямбда-выражения
 $addition = function($x, $y) {
     return $x + $y;
 };
-$result5 = $addition(3, 7); // Ожидаемый результат: 10
+$result5 = $addition(3, 7);
 
-// Стрелочные функции (доступны начиная с PHP 7.4)
 $subtract = fn($x, $y) => $x - $y;
-$result6 = $subtract(10, 3); // Ожидаемый результат: 7
+$result6 = $subtract(10, 3);
 
-// Работа с массивами
 $array1 = [1, 2, 3];
 $array2 = ['a', 'b', 'c'];
 
-// Объединение массивов
-$mergedArray = array_merge($array1, $array2); // Ожидаемый результат: [1, 2, 3, 'a', 'b', 'c']
+$mergedArray = array_merge($array1, $array2);
 
-// Доступ к элементам массива
-$element = $mergedArray[2]; // Ожидаемый результат: 3
+$element = $mergedArray[2];
 
-// Добавление элемента в массив
-$mergedArray[] = 'd'; // Ожидаемый результат: [1, 2, 3, 'a', 'b', 'c', 'd']
+$mergedArray[] = 'd';
 
-// Удаление элемента из массива
-unset($mergedArray[1]); // Ожидаемый результат: [1, 3, 'a', 'b', 'c', 'd']
+unset($mergedArray[1]);
 
-// Подсчет количества элементов в массиве
-$arrayLength = count($mergedArray); // Ожидаемый результат: 6
-/*
-// Вывод результата
-echo "Результаты тестирования:\n";
-echo "Результат1: $result1\n";
-echo "Результат2: $result2\n";
-echo "Результат3: $result3\n";
-echo "Результат4: $result4\n";
-echo "Результат5: $result5\n";
-echo "Результат6: $result6\n";
-print_r($mergedArray);
-echo "Длина массива: $arrayLength\n";
-*/
+$arrayLength = count($mergedArray);

@@ -20,6 +20,6 @@ namespace PHP.Core.Lang.AST.Constructions.Function
         }
 
         public override string ToString() => 
-            $"function({string.Join(", ", Arguments.Select(a => a.ToString()))}){(Use.Length > 0 ? $"use ({string.Join(", ", Use.Select(a => a.ToString()))})" : "")}{{\n{string.Join("\n", Body.Select(a => a.ToString()))}}}";
+            $"function({string.Join(", ", Arguments.Select(a => a.ToString()))}){(Use.Length > 0 ? $"use ({string.Join(", ", Use.Select(a => a.ToString()))})" : "")}{{\n{string.Join("\n", Body.Select(a => a.ToString()))}\n}}";
     }
 }

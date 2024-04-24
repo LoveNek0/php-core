@@ -10,5 +10,7 @@ namespace PHP.Core.Lang.AST.Base
         {
             Operand = operand;
         }
+
+        public override string ToString() => $"{Token.Data} {Operand}";
     }
 }

@@ -93,19 +93,22 @@ namespace PHP.Core.Lang
                     continue;
                 }
 
-                root._children.Add(ParseLine());
+                root._children.Add(ParseGlobalLine());
             }
 
             return root;
         }
 
+        private ASTNode ParseGlobalLine()
+        {
+            if (IsMatch(TokenType.Function))
+                return ParseConstruction();
+            return ParseLine();
+        }
         private ASTNode ParseLine()
         {
             while (IsMatch(TokenType.Semicolon))
                 NextToken();
-
-            if (IsMatch(TokenType.Function))
-                return ParseConstruction();
             
             if (IsMatch(
                     TokenType.Variable, 
@@ -163,7 +166,7 @@ namespace PHP.Core.Lang
             List<ASTNode> body = new List<ASTNode>();
             NextToken(TokenType.CurlyBraceOpen);
             while (!IsMatch(TokenType.CurlyBraceClose))
-                body.Add(ParseCommands());
+                body.Add(ParseLine());
             NextToken(TokenType.CurlyBraceClose);
             return new ASTFunction(token, name, arguments.ToArray(), returnType, body.ToArray());
         }
@@ -223,6 +226,7 @@ namespace PHP.Core.Lang
                 return new ASTPrintOperator(NextToken(), ParseExpression());
             return ParseAssignmentOperator();
         }
+        
         private ASTNode ParseAssignmentOperator()
         {
             ASTNode left = ParseLambdaFunction();

@@ -15,26 +15,22 @@ namespace PHP.Core.Runtime
         private static void Test(string file)
         {
             string path = @"..\..\tests\" + file;
-            Console.WriteLine($"Testing > {file}");
+            Console.WriteLine($"### Testing > {file}");
             Tokenizer tokenizer = new Tokenizer(File.ReadAllText(path));
             TokenItem[] tokens = tokenizer.GetTokens();
-            Console.WriteLine("Testing Tokenizer...");
-            foreach (TokenItem token in tokens)
-                Console.WriteLine(token);
-            Console.WriteLine("Testing ASTBuilder...");
+            //Console.WriteLine("Testing Tokenizer...");
+            //foreach (TokenItem token in tokens)
+            //    Console.WriteLine(token);
+            //Console.WriteLine("Testing ASTBuilder...");
             ASTBuilder builder = new ASTBuilder(tokens);
             ASTRoot root = builder.Build();
             Console.WriteLine(root);
-            Console.WriteLine($"End for > {file}");
+            Console.WriteLine($"### End for < {file}");
         }
         public static void Main(string[] args)
         {
             Test("expressions.php");
-            //Test("dowhile.php");
-            //Test("for.php");
-            //Test("foreach.php");
-            Console.ReadKey();
-            Console.WriteLine("End.");
+            Test("functions.php");
         }
     }
 }
