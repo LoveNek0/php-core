@@ -114,9 +114,10 @@ namespace PHP.Core.Lang
                     TokenType.Decrement,
                     TokenType.Echo,
                     TokenType.Print,
-                    TokenType.Return))
+                    TokenType.Return,
+                    TokenType.Unset))
             {
-                ASTNode node = ParseExpression();
+                ASTNode node = ParseCommands();
                 NextToken(TokenType.Semicolon);
                 return node;
             }
@@ -180,14 +181,38 @@ namespace PHP.Core.Lang
         }
         private ASTNode ParseReturnOperator()
         {
-            if (IsMatch(TokenType.Echo))
+            if (IsMatch(TokenType.Return))
                 return new ASTReturnOperator(NextToken(), ParseExpression());
+            return ParseUnsetOperator();
+        }
+        private ASTNode ParseUnsetOperator()
+        {
+            if (IsMatch(TokenType.Unset))
+            {
+                TokenItem token = NextToken();
+                List<ASTNode> variables = new List<ASTNode>();
+                NextToken(TokenType.BraceOpen);
+                while (!IsMatch(TokenType.BraceClose))
+                {
+                    ASTNode node = ParseExpression();
+                    if (!(node is ASTVariableData) &&
+                        !(node is ASTObjectAccessOperator) &&
+                        !(node is ASTNullsafeObjectAccessOperator) &&
+                        !(node is ASTStaticAccessOperator) &&
+                        !(node is ASTArrayAccessOperator))
+                        throw new SyntaxException($"The unset operator can only be applied to variables", node.Token);
+                    variables.Add(node);
+                    if(!IsMatch(TokenType.Comma))
+                        break;
+                    NextToken(TokenType.Comma);
+                }
+                NextToken(TokenType.BraceClose);
+                return new ASTUnsetOperator(token, variables.ToArray());
+            }
             return ParseExpression();
         }
 
         //  Expressions
-        
-
         private ASTNode ParseExpression()
         {
             return ParsePrintOperator();
@@ -220,7 +245,8 @@ namespace PHP.Core.Lang
                 if(!(left is ASTVariableData) &&
                    !(left is ASTObjectAccessOperator) &&
                    !(left is ASTNullsafeObjectAccessOperator) &&
-                   !(left is ASTStaticAccessOperator))
+                   !(left is ASTStaticAccessOperator) &&
+                   !(left is ASTArrayAccessOperator))
                     throw new SyntaxException($"Unexpected token \"{left.Token.Type}\" before assignment operator", left.Token);
                 TokenItem token = NextToken();
                 switch (token.Type)
@@ -633,7 +659,8 @@ namespace PHP.Core.Lang
                     !(link is ASTArrayAccessOperator))
                     throw new SyntaxException($"Unexpected token {link.Token.Type} before array access operator", link.Token);
                 TokenItem token = NextToken(TokenType.SquareBraceOpen);
-                ASTNode index = ParseExpression();
+                ASTNode index = IsMatch(TokenType.SquareBraceClose) ? null : ParseExpression();
+                NextToken(TokenType.SquareBraceClose);
                 return new ASTArrayAccessOperator(token, link, index);
             }
             return link;

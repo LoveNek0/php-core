@@ -1,3 +1,4 @@
+using System.Linq;
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
@@ -13,5 +14,7 @@ namespace PHP.Core.Lang.AST.Operators
             Link = link;
             Arguments = arguments;
         }
+
+        public override string ToString() => $"{Link}({string.Join(", ", Arguments.Select(a => a.ToString()))})";
     }
 }

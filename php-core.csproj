@@ -17,9 +17,5 @@
       <OutputPath>out\</OutputPath>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="hide\" />
-    </ItemGroup>
-
 
 </Project>
