@@ -18,13 +18,6 @@ namespace PHP.Core.Lang
             TokenType.OpenTagWithEcho,         //  <?= <%=
             TokenType.OpenTag,                 //  <? <?php <%
             TokenType.CloseTag,                 //  ?> %>
-            TokenType.BoolCast,                  //  (bool)(boolean)
-            TokenType.IntCast,                  //  (int)(integer)
-            TokenType.FloatCast,                 //  (float)(real)(double)
-            TokenType.ArrayCast,                  //  (array)
-            TokenType.ObjectCast,                 //  (object)
-            TokenType.StringCast,                 //  (string)
-            TokenType.UnsetCast,                 //  (unset)
             TokenType.InstanceOf,                //  instanceof
             TokenType.New,                       //  new
             TokenType.Clone,                    //  clone
@@ -38,10 +31,12 @@ namespace PHP.Core.Lang
             TokenType.TypeString,                    //  string
             TokenType.TypeArray,                     //  array
             TokenType.TypeObject,                    //  object
+            TokenType.Unset,                     //  unset
             TokenType.Null,                      //  null
             TokenType.True,                      //  true
             TokenType.False,                       //  false
             TokenType.Use,                       //  use
+            TokenType.Fn,                        //  fn
             TokenType.Function,                    //  function
             TokenType.Return,                    //  return
             TokenType.Static,                    //  static
@@ -63,6 +58,7 @@ namespace PHP.Core.Lang
             TokenType.AssignmentSub,              //  -=
             TokenType.Decrement,                  //  --
             TokenType.ObjectOperator,               //  ->
+            TokenType.DoubleArrow,                //  =>
             TokenType.Sub,                        //  -
             TokenType.AssignmentMul,              //  *=
             TokenType.AssignmentPow,              //  **=

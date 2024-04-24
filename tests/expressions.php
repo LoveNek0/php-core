@@ -1,10 +1,7 @@
 <?php
 
-$a = function(callable $b) use (&$c){
-    $c += $b();
-    return $c;
-};
-$a(function(){return 1;});
+$a->b = 123 + 1 * 3 * [4, 5, 6 => $a];
+$b = fn() => fn($a) => $a - 10;
 
 /*
 $a = 1 + 2 - 3 * 4 + (5 * 3 % 1 - 6 * 7 ** 10) + (8 - 9);

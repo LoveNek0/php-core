@@ -2,7 +2,7 @@
 
 namespace PHP.Core.Lang.AST.Base
 {
-    public class ASTData : ASTNode
+    public abstract class ASTData : ASTNode
     {
         internal ASTData(TokenItem token) : base(token)
         {

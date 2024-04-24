@@ -3,6 +3,8 @@ bin
 .idea
 packages
 
+hide
+
 .vs
 obj
 *.config

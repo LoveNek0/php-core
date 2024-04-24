@@ -1,3 +1,4 @@
+using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
 namespace PHP.Core.Lang.AST.Constructions.Function
@@ -5,20 +6,22 @@ namespace PHP.Core.Lang.AST.Constructions.Function
 
     public class ASTFunctionArgument
     {
-        public TokenItem Type;
-        public TokenItem Sign;
-        public TokenItem Variable;
-        public TokenItem ByDefault;
+        public readonly TokenItem Type;
+        public readonly bool IsIsPointer;
+        public readonly bool IsMultiArgument;
+        public readonly TokenItem Name;
+        public readonly ASTNode ByDefault;
 
-        public ASTFunctionArgument(TokenItem type, TokenItem sign, TokenItem variable, TokenItem byDefault)
+        public ASTFunctionArgument(TokenItem type, bool isPointer, bool isMultiArgument, TokenItem name, ASTNode byDefault)
         {
             Type = type;
-            Sign = sign;
-            Variable = variable;
+            IsIsPointer = isPointer;
+            IsMultiArgument = isMultiArgument;
+            Name = name;
             ByDefault = byDefault;
         }
 
         public override string ToString() =>
-            $"{(Type != null ? Type.Data + " " : "")}{(Sign != null ? Sign.Data : "")}{Variable.Data}{(ByDefault != null ? " = " + ByDefault.Data : "")}";
+            $"{(Type != null ? $"{Type.Data} " : "")}{(IsIsPointer ? "&" : "")}{(IsMultiArgument ? "..." : "")}{Name.Data}{(ByDefault != null ? $" = {ByDefault}" : "")}";
     }
 }

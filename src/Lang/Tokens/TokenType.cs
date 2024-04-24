@@ -167,7 +167,7 @@ namespace PHP.Core.Lang.Tokens
         Yield,                    //  yield
         [TokenTypePattern(@"\b[Yy][Ii][Ee][Ll][Dd][_][Ff][Rr][Oo][Mm]\b")]
         YieldFrom,               //  yield_from
-        [TokenTypePattern(@"\b[.][.][.]\b")]
+        [TokenTypePattern(@"[.][.][.]")]
         Ellipsis,                 //  ...
         [TokenTypePattern(@"\b[Ff][Nn]\b")]
         Fn,                       //  fn
@@ -230,25 +230,8 @@ namespace PHP.Core.Lang.Tokens
         [TokenTypePattern(@"[&]")]
         Attribute,                                //  attribytes
 
-        //  Array
-        Array,                    //  array()
+        [TokenTypePattern(@"[=][>]")]
         DoubleArrow,             //  =>
-
-        //  Casting
-        [TokenTypePattern(@"[(]\s*(([Ii][Nn][Tt])|([Ii][Nn][Tt][Ee][Gg][Ee][Rr]))\s*[)]")]
-        IntCast,                 //  (int) (integer)
-        [TokenTypePattern(@"[(]\s*(([Rr][Ee][Aa][Ll])|([Dd][Oo][Uu][Bb][Ll][Ee])|([Ff][Ll][Oo][Aa][Tt]))\s*[)]")]
-        FloatCast,              //  (real) (double) (float)
-        [TokenTypePattern(@"[(]\s*([Ss][Tt][Rr][Ii][Nn][Gg])\s*[)]")]
-        StringCast,              //  (string)
-        [TokenTypePattern(@"[(]\s*(([Bb][Oo][Oo][Ll])|([Bb][Oo][Oo][Ll][Ee][Aa][Nn]))\s*[)]")]
-        BoolCast,                //  (bool) (boolean)
-        [TokenTypePattern(@"[(]\s*([Aa][Rr][Rr][Aa][Yy])\s*[)]")]
-        ArrayCast,               //  (array)
-        [TokenTypePattern(@"[(]\s*([Oo][Bb][Jj][Ee][Cc][Tt])\s*[)]")]
-        ObjectCast,              //  (object)
-        [TokenTypePattern(@"[(]\s*([Uu][Nn][Ss][Ee][Tt])\s*[)]")]
-        UnsetCast,               //  (unset)
 
         //  Cycles
         Do,                       //  do
@@ -298,6 +281,9 @@ namespace PHP.Core.Lang.Tokens
         Echo,                     //  echo
         [TokenTypePattern(@"\b[Pp][Rr][Ii][Nn][Tt]\b")]
         Print,                    //  print
+        [TokenTypePattern(@"\b[Uu][Nn][Ss][Ee][Tt]\b")]
+        Unset,                    //  unset
+        
         
         Match,                    //  match
         Global,                   //  global

@@ -8,11 +8,11 @@ namespace PHP.Core.Lang.AST.Constructions.Function
 {
     public class ASTLambdaFunction : ASTNode
     {
-        public readonly ASTLambdaFunctionArgument[] Arguments;
+        public readonly ASTFunctionArgument[] Arguments;
         public readonly ASTLambdaFunctionUseArgument[] Use;
         public readonly ASTNode[] Body;
         
-        internal ASTLambdaFunction(TokenItem token, ASTLambdaFunctionArgument[] arguments, ASTLambdaFunctionUseArgument[] use, ASTNode[] body) : base(token)
+        internal ASTLambdaFunction(TokenItem token, ASTFunctionArgument[] arguments, ASTLambdaFunctionUseArgument[] use, ASTNode[] body) : base(token)
         {
             Arguments = arguments;
             Use = use;
@@ -20,6 +20,6 @@ namespace PHP.Core.Lang.AST.Constructions.Function
         }
 
         public override string ToString() => 
-            $"{Token.Data}({String.Join(", ", Arguments.Select(a => a.ToString()))}){(Use.Length > 0 ? " use (" + String.Join(", ", Use.Select(b => b.ToString())) + ")" : "")}){{\n{(string.Join("\n", Body.Select(c => c.ToString())))}\n}}";
+            $"function({string.Join(", ", Arguments.Select(a => a.ToString()))}){(Use.Length > 0 ? $"use ({string.Join(", ", Use.Select(a => a.ToString()))})" : "")}{{\n{string.Join("\n", Body.Select(a => a.ToString()))}}}";
     }
 }
