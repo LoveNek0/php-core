@@ -333,6 +333,12 @@ namespace PHP.Core.Lang
             if (IsMatch(TokenType.Function))
             {
                 TokenItem token = NextToken();
+                bool resultAsPointer = false;
+                if (IsMatch(TokenType.BitAnd))
+                {
+                    NextToken();
+                    resultAsPointer = true;
+                }
                 NextToken(TokenType.BraceOpen);
                 List<ASTFunctionArgument> arguments = new List<ASTFunctionArgument>();
                 while(!IsMatch(TokenType.BraceClose)){
@@ -358,12 +364,27 @@ namespace PHP.Core.Lang
                     }
                     NextToken(TokenType.BraceClose);
                 }
+                TokenItem returnType = null;
+                if (IsMatch(TokenType.Colon))
+                {
+                    NextToken();
+                    returnType = NextToken(
+                        TokenType.TypeMixed,
+                        TokenType.TypeCallable,
+                        TokenType.TypeBool,
+                        TokenType.TypeInt,
+                        TokenType.TypeFloat,
+                        TokenType.TypeString,
+                        TokenType.TypeArray,
+                        TokenType.TypeObject,
+                        TokenType.ConstString);
+                }
                 NextToken(TokenType.CurlyBraceOpen);
                 List<ASTNode> body = new List<ASTNode>();
                 while (!IsMatch(TokenType.CurlyBraceClose))
                     body.Add(ParseLine());
                 NextToken(TokenType.CurlyBraceClose);
-                return new ASTLambdaFunction(token, arguments.ToArray(), use.ToArray(), body.ToArray());
+                return new ASTLambdaFunction(token, resultAsPointer, arguments.ToArray(), returnType, use.ToArray(), body.ToArray());
             }
             return ParseArrowFunction();
         }
@@ -388,9 +409,24 @@ namespace PHP.Core.Lang
                     NextToken(TokenType.Comma);
                 }
                 NextToken(TokenType.BraceClose);
+                TokenItem returnType = null;
+                if (IsMatch(TokenType.Colon))
+                {
+                    NextToken();
+                    returnType = NextToken(
+                        TokenType.TypeMixed,
+                        TokenType.TypeCallable,
+                        TokenType.TypeBool,
+                        TokenType.TypeInt,
+                        TokenType.TypeFloat,
+                        TokenType.TypeString,
+                        TokenType.TypeArray,
+                        TokenType.TypeObject,
+                        TokenType.ConstString);
+                }
                 NextToken(TokenType.DoubleArrow);
                 ASTNode body = ParseExpression();
-                return new ASTArrowFunction(token, resultAsPointer, arguments.ToArray(), body);
+                return new ASTArrowFunction(token, resultAsPointer, arguments.ToArray(), returnType, body);
             }
             return ParseTernaryOperator();
         }

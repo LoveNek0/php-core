@@ -8,14 +8,16 @@ namespace PHP.Core.Lang.AST.Constructions.Function
     {
         public readonly bool ResultAsPointer;
         public readonly ASTFunctionArgument[] Arguments;
+        public readonly TokenItem ReturnType;
         public readonly ASTNode Body;
-        internal ASTArrowFunction(TokenItem token, bool resultAsPointer, ASTFunctionArgument[] arguments, ASTNode body) : base(token)
+        internal ASTArrowFunction(TokenItem token, bool resultAsPointer, ASTFunctionArgument[] arguments, TokenItem returnType, ASTNode body) : base(token)
         {
             ResultAsPointer = resultAsPointer;
             Arguments = arguments;
+            ReturnType = returnType;
             Body = body;
         }
 
-        public override string ToString() => $"fn{(ResultAsPointer?"&":"")}({string.Join(", ", Arguments.Select(a => a.ToString()))}) => {Body}";
+        public override string ToString() => $"fn{(ResultAsPointer?"&":"")}({string.Join(", ", Arguments.Select(a => a.ToString()))}){(ReturnType != null ? $": {ReturnType.Data}" : "")} => {Body}";
     }
 }

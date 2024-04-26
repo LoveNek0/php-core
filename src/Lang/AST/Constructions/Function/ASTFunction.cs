@@ -13,8 +13,6 @@ namespace PHP.Core.Lang.AST.Constructions.Function
         public readonly TokenItem ReturnType;
         public readonly ASTNode[] Body;
         
-        
-        //  TODO: конструктор и парсинг функций
         public ASTFunction(TokenItem token, TokenItem name, ASTFunctionArgument[] arguments, TokenItem returnType, ASTNode[] body) : base(token)
         {
             Name = name;
@@ -24,6 +22,6 @@ namespace PHP.Core.Lang.AST.Constructions.Function
         }
 
         public override string ToString() =>
-            $"function {Name} ({String.Join(", ", Arguments.Select(a => a.ToString()))}{{\n{String.Join("\n", Body.Select(a => a.ToString()))}\n}}";
+            $"function {Name.Data} ({String.Join(", ", Arguments.Select(a => a.ToString()))}){(ReturnType != null ? $": {ReturnType.Data}" : "")}{{\n{String.Join("\n", Body.Select(a => a.ToString()))}\n}}";
     }
 }
