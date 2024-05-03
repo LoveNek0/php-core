@@ -1,28 +1,20 @@
-using System;
-using System.Collections.Generic;
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Structures.Function
+namespace PHP.Core.Lang.AST.Constructions
 {
     public class ASTIf : ASTNode
     {
-        public ASTNode Condition => _condition;
-        public ASTNode[] IfBlock => _ifBlock.ToArray();
-        public ASTNode[] ElseBlock => _elseBlock.ToArray();
-
-
-        internal ASTNode _condition;
-        internal List<ASTNode> _ifBlock = new List<ASTNode>();
-        internal List<ASTNode> _elseBlock = new List<ASTNode>();
-
-        internal ASTIf(TokenItem token) : base(token)
+        public readonly ASTNode Condition;
+        public readonly ASTNode TrueBlock;
+        public readonly ASTNode FalseBlock;
+        internal ASTIf(TokenItem token, ASTNode condition, ASTNode trueBlock, ASTNode falseBlock) : base(token)
         {
+            Condition = condition;
+            TrueBlock = trueBlock;
+            FalseBlock = falseBlock;
         }
 
-        public override string ToString() => $"if({Condition}){{\n{String.Join("\n", _ifBlock)}\n}}" +
-                                             (_elseBlock.Count > 0
-                                                 ? $"else{{\n{String.Join("\n", _elseBlock)}\n}}"
-                                                 : "");
+        public override string ToString() => $"[if({Condition})\n{TrueBlock}{(FalseBlock != null ? $"\nelse\n{FalseBlock}" : "")}]";
     }
 }

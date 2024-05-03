@@ -11,22 +11,20 @@ using System.Threading.Tasks;
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.AST.Constructions;
 using PHP.Core.Lang.AST.Constructions.Function;
+using PHP.Core.Lang.AST.Constructions.Loops;
 using PHP.Core.Lang.AST.Data;
 using PHP.Core.Lang.AST.Operators;
 using PHP.Core.Lang.AST.Operators.Access;
+using PHP.Core.Lang.AST.Operators.Arithmetic;
 using PHP.Core.Lang.AST.Operators.Assignment;
-using PHP.Core.Lang.AST.Operators.Binary;
-using PHP.Core.Lang.AST.Operators.Binary.Bitwise;
-using PHP.Core.Lang.AST.Operators.Binary.Comparsion;
-using PHP.Core.Lang.AST.Operators.Binary.Logical;
+using PHP.Core.Lang.AST.Operators.Bitwise;
+using PHP.Core.Lang.AST.Operators.Comparison;
+using PHP.Core.Lang.AST.Operators.Logical;
 using PHP.Core.Lang.AST.Operators.Operations;
+using PHP.Core.Lang.AST.Operators.String;
 using PHP.Core.Lang.AST.Operators.Ternary;
-using PHP.Core.Lang.AST.Operators.Unary;
-using PHP.Core.Lang.AST.Operators.Unary.TypeCast;
-using PHP.Core.Lang.AST.Structures;
-using PHP.Core.Lang.AST.Structures.Function;
-using PHP.Core.Lang.AST.Structures.Loops;
-using ASTInstanceOfOperator = PHP.Core.Lang.AST.Operators.Binary.ASTInstanceOfOperator;
+using PHP.Core.Lang.AST.Operators.TypeCast;
+using ASTInstanceOfOperator = PHP.Core.Lang.AST.Operators.Operations.ASTInstanceOfOperator;
 
 namespace PHP.Core.Lang
 {
@@ -102,38 +100,11 @@ namespace PHP.Core.Lang
         private ASTNode ParseGlobalLine()
         {
             if (IsMatch(TokenType.Function))
-                return ParseConstruction();
+                return ParseFunction();
             return ParseLine();
         }
-        private ASTNode ParseLine()
-        {
-            while (IsMatch(TokenType.Semicolon))
-                NextToken();
-            
-            if (IsMatch(
-                    TokenType.Variable, 
-                    TokenType.ConstString, 
-                    TokenType.Increment,
-                    TokenType.Decrement,
-                    TokenType.Echo,
-                    TokenType.Print,
-                    TokenType.Return,
-                    TokenType.Unset))
-            {
-                ASTNode node = ParseCommands();
-                NextToken(TokenType.Semicolon);
-                return node;
-            }
 
-            throw new UnexpectedTokenException(GetToken());
-        }
-
-        //  Constructions
-
-        private ASTNode ParseConstruction()
-        {
-            return ParseFunction();
-        }
+        //  Global Constructions
         private ASTNode ParseFunction()
         {
             TokenItem token = NextToken(TokenType.Function);
@@ -169,6 +140,160 @@ namespace PHP.Core.Lang
                 body.Add(ParseLine());
             NextToken(TokenType.CurlyBraceClose);
             return new ASTFunction(token, name, arguments.ToArray(), returnType, body.ToArray());
+        }
+        
+        private ASTNode ParseLine()
+        {
+            while (IsMatch(TokenType.Semicolon))
+                NextToken();
+
+            if (IsMatch(
+                    TokenType.If,
+                    TokenType.Do,
+                    TokenType.While,
+                    TokenType.For,
+                    TokenType.Foreach,
+                    TokenType.CurlyBraceOpen))
+            {
+                return ParseConstruction();
+            }
+            
+            if (IsMatch(
+                    TokenType.Variable, 
+                    TokenType.ConstString, 
+                    TokenType.Increment,
+                    TokenType.Decrement,
+                    TokenType.Echo,
+                    TokenType.Print,
+                    TokenType.Return,
+                    TokenType.Unset))
+            {
+                ASTNode node = ParseCommands();
+                NextToken(TokenType.Semicolon);
+                return node;
+            }
+
+            throw new UnexpectedTokenException(GetToken());
+        }
+        
+        //  Local Constructions
+        private ASTNode ParseConstruction()
+        {
+            return ParseIfConstruction();
+        }
+        private ASTNode ParseIfConstruction()
+        {
+            if (IsMatch(TokenType.If))
+            {
+                TokenItem token = NextToken(TokenType.If);
+                NextToken(TokenType.BraceOpen);
+                ASTNode condition = ParseExpression();
+                NextToken(TokenType.BraceClose);
+                ASTNode trueBlock = ParseLine();
+                ASTNode falseBlock = null;
+                if (IsMatch(TokenType.Else))
+                {
+                    NextToken();
+                    falseBlock = ParseLine();
+                }
+                return new ASTIf(token, condition, trueBlock, falseBlock);
+            }
+            return ParseWhileConstruction();
+        }
+        private ASTNode ParseWhileConstruction()
+        {
+            if (IsMatch(TokenType.While))
+            {
+                TokenItem token = NextToken(TokenType.While);
+                NextToken(TokenType.BraceOpen);
+                ASTNode condition = ParseExpression();
+                NextToken(TokenType.BraceClose);
+                ASTNode body = ParseLine();
+                return new ASTWhile(token, condition, body);
+            }
+            return ParseDoWhileConstruction();
+        }
+        private ASTNode ParseDoWhileConstruction()
+        {
+            if (IsMatch(TokenType.Do))
+            {
+                TokenItem token = NextToken(TokenType.Do);
+                ASTNode body = ParseLine();
+                NextToken(TokenType.While);
+                NextToken(TokenType.BraceOpen);
+                ASTNode condition = ParseExpression();
+                NextToken(TokenType.BraceClose);
+                NextToken(TokenType.Semicolon);
+                return new ASTDoWhile(token, condition, body);
+            }
+            return ParseForConstruction();
+        }
+        private ASTNode ParseForConstruction()
+        {
+            if (IsMatch(TokenType.For))
+            {
+                TokenItem token = NextToken(TokenType.For);
+                NextToken(TokenType.BraceOpen);
+                ASTNode initialAction = null;
+                ASTNode condition = null;
+                ASTNode postAction = null;
+                if (!IsMatch(TokenType.Semicolon))
+                    initialAction = ParseExpression();
+                NextToken(TokenType.Semicolon);
+                if (!IsMatch(TokenType.Semicolon))
+                    condition = ParseExpression();
+                NextToken(TokenType.Semicolon);
+                if (!IsMatch(TokenType.BraceClose))
+                    postAction = ParseExpression();
+                NextToken(TokenType.BraceClose);
+                ASTNode body = ParseLine();
+                return new ASTFor(token, initialAction, condition, postAction, body);
+            }
+            return ParseForeachConstruction();
+        }
+        private ASTNode ParseForeachConstruction()
+        {
+            if (IsMatch(TokenType.Foreach))
+            {
+                TokenItem token = NextToken(TokenType.Foreach);
+                NextToken(TokenType.BraceOpen);
+                ASTNode collection = ParseExpression();
+                if (!(collection is ASTVariableData) &&
+                    !(collection is ASTObjectAccessOperator) &&
+                    !(collection is ASTNullsafeObjectAccessOperator) &&
+                    !(collection is ASTStaticAccessOperator) &&
+                    !(collection is ASTFunctionCallOperator) &&
+                    !(collection is ASTPointerOperator) &&
+                    !(collection is ASTArrayAccessOperator))
+                    throw new SyntaxException($"Unexpected token {collection.Token.Type}", collection.Token);
+                NextToken(TokenType.As);
+                TokenItem key = null;
+                TokenItem value = NextToken(TokenType.Variable);
+                if (IsMatch(TokenType.DoubleArrow))
+                {
+                    NextToken(TokenType.DoubleArrow);
+                    key = value;
+                    value = NextToken(TokenType.Variable);
+                }
+                NextToken(TokenType.BraceClose);
+                ASTNode body = ParseLine();
+                return new ASTForeach(token, collection, key, value, body);
+            }
+            return ParseBlockConstruction();
+        }
+        //  TODO: Switch construction
+        private ASTNode ParseBlockConstruction()
+        {
+            if (IsMatch(TokenType.CurlyBraceOpen))
+            {
+                TokenItem token = NextToken(TokenType.CurlyBraceOpen);
+                List<ASTNode> body = new List<ASTNode>();
+                while(!IsMatch(TokenType.CurlyBraceClose))
+                    body.Add(ParseLine());
+                NextToken(TokenType.CurlyBraceClose);
+                return new ASTBlock(token, body.ToArray());
+            }
+            return ParseLine();
         }
         
         //  Command operators
@@ -214,7 +339,8 @@ namespace PHP.Core.Lang
             }
             return ParseExpression();
         }
-
+        //  TODO: continue and break
+        
         //  Expressions
         private ASTNode ParseExpression()
         {
@@ -226,7 +352,6 @@ namespace PHP.Core.Lang
                 return new ASTPrintOperator(NextToken(), ParseExpression());
             return ParseAssignmentOperator();
         }
-        
         private ASTNode ParseAssignmentOperator()
         {
             ASTNode left = ParseLambdaFunction();
@@ -287,7 +412,6 @@ namespace PHP.Core.Lang
             }
             return left;
         }
-        
         private ASTFunctionArgument ParseFunctionArgument()
         {
             TokenItem type = IsMatch(TokenType.TypeBool,
@@ -430,7 +554,6 @@ namespace PHP.Core.Lang
             }
             return ParseTernaryOperator();
         }
-
         private ASTNode ParseTernaryOperator()
         {
             ASTNode condition = ParseLogicalOperator();

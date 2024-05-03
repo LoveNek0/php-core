@@ -1,21 +1,20 @@
-﻿using PHP.Core.Lang.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PHP.Core.Lang.AST.Base;
+using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST
+namespace PHP.Core.Lang.AST.Constructions
 {
     public class ASTBlock : ASTNode
     {
-        public ASTNode[] Lines => _lines.ToArray();
-        internal List<ASTNode> _lines = new List<ASTNode>(); 
-        internal ASTBlock(TokenItem token) : base(token)
+        public readonly ASTNode[] Body;
+        
+        internal ASTBlock(TokenItem token, ASTNode[] body) : base(token)
         {
+            Body = body;
         }
 
-        public override string ToString() => $"{{\n{String.Join("\n", _lines)}\n}}";
+        public override string ToString() => $"{{\n{String.Join("\n", Body.Select(a => a))}\n}}";
     }
 }

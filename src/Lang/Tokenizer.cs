@@ -42,6 +42,13 @@ namespace PHP.Core.Lang
             TokenType.Static,                    //  static
             TokenType.Yield,                     //  yield
             TokenType.YieldFrom,                 //  yield_from
+            TokenType.While,                     //  while
+            TokenType.Do,                        //  do
+            TokenType.For,                       //  for
+            TokenType.Foreach,                   //  foreach
+            TokenType.If,                        //  if
+            TokenType.Else,                      //  else
+            TokenType.As,                        //  as
             TokenType.Comma,                      //  ,
             TokenType.Semicolon,                  //  ;
             TokenType.DoubleColon,                  //  ::

@@ -1,18 +1,20 @@
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Structures.Loops
+namespace PHP.Core.Lang.AST.Constructions.Loops
 {
 
-    public class ASTWhile : ASTBlock
+    public class ASTWhile : ASTNode
     {
-        public ASTNode Condition => _condition;
-        internal ASTNode _condition;
+        public readonly ASTNode Condition;
+        public readonly ASTNode Body;
 
-        internal ASTWhile(TokenItem token) : base(token)
-        {
+        internal ASTWhile(TokenItem token, ASTNode condition, ASTNode body) : base(token)
+        { 
+            Condition = condition;
+            Body = body;
         }
 
-        public override string ToString() => $"while({_condition}){base.ToString()}";
+        public override string ToString() => $"[while({Condition})\n{Body}]";
     }
 }

@@ -1,7 +1,7 @@
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Operators.Binary.Bitwise
+namespace PHP.Core.Lang.AST.Operators.Bitwise
 {
     public class ASTBitAndOperator : ASTBinary
     {

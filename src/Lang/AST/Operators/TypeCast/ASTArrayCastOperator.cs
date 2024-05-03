@@ -1,7 +1,7 @@
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Operators.Unary.TypeCast
+namespace PHP.Core.Lang.AST.Operators.TypeCast
 {
     public class ASTArrayCastOperator : ASTUnary
     {

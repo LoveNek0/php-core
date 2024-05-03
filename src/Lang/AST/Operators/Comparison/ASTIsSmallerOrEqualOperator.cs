@@ -1,7 +1,7 @@
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Operators.Binary.Comparsion
+namespace PHP.Core.Lang.AST.Operators.Comparison
 {
     public class ASTIsSmallerOrEqualOperator : ASTBinary
     {

@@ -1,24 +1,25 @@
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Structures.Loops
+namespace PHP.Core.Lang.AST.Constructions.Loops
 {
 
-    public class ASTForeach : ASTBlock
+    public class ASTForeach : ASTNode
     {
-        public ASTNode Container => _container;
-        public ASTNode Key => _key;
-        public ASTNode Value => _value;
+        public readonly ASTNode Collection;
+        public readonly TokenItem Key;
+        public readonly TokenItem Value;
+        public readonly ASTNode Body;
 
-        internal ASTNode _container;
-        internal ASTNode _key = null;
-        internal ASTNode _value;
-
-        internal ASTForeach(TokenItem token) : base(token)
+        internal ASTForeach(TokenItem token, ASTNode collection, TokenItem key, TokenItem value, ASTNode body) : base(token)
         {
+            Collection = collection;
+            Key = key;
+            Value = value;
+            Body = body;
         }
 
         public override string ToString() =>
-            $"foreach({_container} as {(_key == null ? "" : _key + " => ")}{_value}{base.ToString()}";
+            $"[foreach({Collection} as {(Key == null ? "" : Key.Data + " => ")}{Value.Data})\n{Body}]";
     }
 }

@@ -2,7 +2,7 @@ using System.Linq;
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Operators
+namespace PHP.Core.Lang.AST.Operators.Access
 {
     public class ASTFunctionCallOperator : ASTNode
     {

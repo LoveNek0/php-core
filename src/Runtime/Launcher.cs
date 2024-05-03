@@ -31,6 +31,7 @@ namespace PHP.Core.Runtime
         {
             Test("expressions.php");
             Test("functions.php");
+            Test("constructions.php");
         }
     }
 }

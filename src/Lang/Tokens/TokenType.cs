@@ -234,14 +234,17 @@ namespace PHP.Core.Lang.Tokens
         DoubleArrow,             //  =>
 
         //  Cycles
+        [TokenTypePattern(@"\b[Dd][Oo]\b")]
         Do,                       //  do
+        [TokenTypePattern(@"\b[Ww][Hh][Ii][Ll][Ee]\b")]
         While,                    //  while
-        EndWhile,                 //  endwhile
+        [TokenTypePattern(@"\b[Ff][Oo][Rr]\b")]
         For,                      //  for
-        EndFor,                   //  endfor
+        [TokenTypePattern(@"\b[Ff][Oo][Rr][Ee][Aa][Cc][Hh]\b")]
         Foreach,                  //  foreach
-        EndForeach,               //  endforeach
+        [TokenTypePattern(@"\b[Aa][Ss]\b")]
         As,                       //  as
+        [TokenTypePattern(@"\b[Cc][Oo][Nn][Tt][Ii][Nn][Uu][Ee]\b")]
         Continue,                 //  continue
 
         //  Switch
@@ -252,10 +255,10 @@ namespace PHP.Core.Lang.Tokens
         Default,                  //  default
 
         //  if ... else
+        [TokenTypePattern(@"\b[Ii][Ff]\b")]
         If,                       //  if
+        [TokenTypePattern(@"\b[Ee][Ll][Ss][Ee]\b")]
         Else,                     //  else
-        ElseIf,                   //  elseif
-        EndIf,                    //  endif
 
         //  try .. catch
         Throw,                    //  throw

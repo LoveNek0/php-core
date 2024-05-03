@@ -1,24 +1,25 @@
 using PHP.Core.Lang.AST.Base;
 using PHP.Core.Lang.Tokens;
 
-namespace PHP.Core.Lang.AST.Structures.Loops
+namespace PHP.Core.Lang.AST.Constructions.Loops
 {
 
-    public class ASTFor : ASTBlock
+    public class ASTFor : ASTNode
     {
-        public ASTNode InitialAction => _initialAction;
-        public ASTNode Condition => _condition;
-        public ASTNode PostAction => _postAction;
-
-        internal ASTNode _initialAction = null;
-        internal ASTNode _condition = null;
-        internal ASTNode _postAction = null;
-
-        internal ASTFor(TokenItem token) : base(token)
+        public readonly ASTNode InitialAction;
+        public readonly ASTNode Condition;
+        public readonly ASTNode PostAction;
+        public readonly ASTNode Body;
+        
+        internal ASTFor(TokenItem token, ASTNode initialAction, ASTNode condition, ASTNode postAction, ASTNode body) : base(token)
         {
+            InitialAction = initialAction;
+            Condition = condition;
+            PostAction = postAction;
+            Body = body;
         }
 
         public override string ToString() =>
-            $"for({(_initialAction == null ? "" : _initialAction.ToString())};{(_condition == null ? "" : _condition.ToString())};{(_postAction == null ? "" : _postAction.ToString())}){base.ToString()}";
+            $"[for({(InitialAction == null ? "" : InitialAction.ToString())};{(Condition == null ? "" : Condition.ToString())};{(PostAction == null ? "" : PostAction.ToString())})\n{Body}]";
     }
 }
