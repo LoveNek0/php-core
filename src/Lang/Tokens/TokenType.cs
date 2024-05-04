@@ -246,12 +246,15 @@ namespace PHP.Core.Lang.Tokens
         As,                       //  as
         [TokenTypePattern(@"\b[Cc][Oo][Nn][Tt][Ii][Nn][Uu][Ee]\b")]
         Continue,                 //  continue
+        [TokenTypePattern(@"\b[Bb][Rr][Ee][Aa][Kk]\b")]
+        Break,                    //  break
 
         //  Switch
+        [TokenTypePattern(@"\b[Ss][Ww][Ii][Tt][Cc][Hh]\b")]
         Switch,                   //  switch
-        EndSwitch,                //  endswitch
+        [TokenTypePattern(@"\b[Cc][Aa][Ss][Ee]\b")]
         Case,                     //  case
-        Break,                    //  break
+        [TokenTypePattern(@"\b[Dd][Ee][Ff][Aa][Uu][Ll][Tt]\b")]
         Default,                  //  default
 
         //  if ... else

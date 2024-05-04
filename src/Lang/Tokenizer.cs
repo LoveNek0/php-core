@@ -49,6 +49,11 @@ namespace PHP.Core.Lang
             TokenType.If,                        //  if
             TokenType.Else,                      //  else
             TokenType.As,                        //  as
+            TokenType.Break,                     //  break
+            TokenType.Continue,                  //  continue
+            TokenType.Switch,                    //  switch
+            TokenType.Case,                      //  case
+            TokenType.Default,                   //  default
             TokenType.Comma,                      //  ,
             TokenType.Semicolon,                  //  ;
             TokenType.DoubleColon,                  //  ::

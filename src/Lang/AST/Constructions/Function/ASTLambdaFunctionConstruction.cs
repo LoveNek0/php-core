@@ -6,7 +6,7 @@ using PHP.Core.Lang.Tokens;
 
 namespace PHP.Core.Lang.AST.Constructions.Function
 {
-    public class ASTLambdaFunction : ASTNode
+    public class ASTLambdaFunctionConstruction : ASTNode
     {
         public readonly bool ResultAsPointer;
         public readonly ASTFunctionArgument[] Arguments;
@@ -14,7 +14,7 @@ namespace PHP.Core.Lang.AST.Constructions.Function
         public readonly TokenItem ReturnType;
         public readonly ASTNode[] Body;
         
-        internal ASTLambdaFunction(TokenItem token, bool resultAsPointer, ASTFunctionArgument[] arguments, TokenItem returnType, ASTLambdaFunctionUseArgument[] use, ASTNode[] body) : base(token)
+        internal ASTLambdaFunctionConstruction(TokenItem token, bool resultAsPointer, ASTFunctionArgument[] arguments, TokenItem returnType, ASTLambdaFunctionUseArgument[] use, ASTNode[] body) : base(token)
         {
             ResultAsPointer = resultAsPointer;
             Arguments = arguments;

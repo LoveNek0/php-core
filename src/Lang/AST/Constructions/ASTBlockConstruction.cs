@@ -6,11 +6,11 @@ using PHP.Core.Lang.Tokens;
 
 namespace PHP.Core.Lang.AST.Constructions
 {
-    public class ASTBlock : ASTNode
+    public class ASTBlockConstruction : ASTNode
     {
         public readonly ASTNode[] Body;
         
-        internal ASTBlock(TokenItem token, ASTNode[] body) : base(token)
+        internal ASTBlockConstruction(TokenItem token, ASTNode[] body) : base(token)
         {
             Body = body;
         }

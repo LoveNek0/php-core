@@ -6,14 +6,14 @@ using PHP.Core.Lang.Tokens;
 namespace PHP.Core.Lang.AST.Constructions.Function
 {
 
-    public class ASTFunction : ASTNode
+    public class ASTFunctionConstruction : ASTNode
     {
         public readonly TokenItem Name;
         public readonly ASTFunctionArgument[] Arguments;
         public readonly TokenItem ReturnType;
         public readonly ASTNode[] Body;
         
-        public ASTFunction(TokenItem token, TokenItem name, ASTFunctionArgument[] arguments, TokenItem returnType, ASTNode[] body) : base(token)
+        public ASTFunctionConstruction(TokenItem token, TokenItem name, ASTFunctionArgument[] arguments, TokenItem returnType, ASTNode[] body) : base(token)
         {
             Name = name;
             Arguments = arguments;

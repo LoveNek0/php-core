@@ -3,12 +3,12 @@ using PHP.Core.Lang.Tokens;
 
 namespace PHP.Core.Lang.AST.Constructions.Loops
 {
-    public class ASTDoWhile : ASTNode
+    public class ASTDoWhileConstruction : ASTNode
     {
         public readonly ASTNode Condition;
         public readonly ASTNode Body;
 
-        internal ASTDoWhile(TokenItem token, ASTNode condition, ASTNode body) : base(token)
+        internal ASTDoWhileConstruction(TokenItem token, ASTNode condition, ASTNode body) : base(token)
         { 
             Condition = condition;
             Body = body;

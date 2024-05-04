@@ -4,13 +4,13 @@ using PHP.Core.Lang.Tokens;
 
 namespace PHP.Core.Lang.AST.Constructions.Function
 {
-    public class ASTArrowFunction : ASTNode
+    public class ASTArrowFunctionConstruction : ASTNode
     {
         public readonly bool ResultAsPointer;
         public readonly ASTFunctionArgument[] Arguments;
         public readonly TokenItem ReturnType;
         public readonly ASTNode Body;
-        internal ASTArrowFunction(TokenItem token, bool resultAsPointer, ASTFunctionArgument[] arguments, TokenItem returnType, ASTNode body) : base(token)
+        internal ASTArrowFunctionConstruction(TokenItem token, bool resultAsPointer, ASTFunctionArgument[] arguments, TokenItem returnType, ASTNode body) : base(token)
         {
             ResultAsPointer = resultAsPointer;
             Arguments = arguments;

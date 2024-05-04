@@ -39,3 +39,27 @@ if(isset($a) && $a > $b){
 }
 else
     echo $b;
+
+switch($a->b){
+    case 1:
+    echo 123;
+    break;
+    case 2:
+    case 3:
+    case $a - 1:
+    print 1-2+3;
+    {
+        echo 1234;
+        break;
+    }
+    default:
+    print 12345;
+    echo 123456;
+    break;
+}
+
+while(true)
+    if($a-- > $b++)
+        break;
+    else
+        continue;

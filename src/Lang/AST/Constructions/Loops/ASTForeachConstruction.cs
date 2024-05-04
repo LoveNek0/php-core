@@ -4,14 +4,14 @@ using PHP.Core.Lang.Tokens;
 namespace PHP.Core.Lang.AST.Constructions.Loops
 {
 
-    public class ASTForeach : ASTNode
+    public class ASTForeachConstruction : ASTNode
     {
         public readonly ASTNode Collection;
         public readonly TokenItem Key;
         public readonly TokenItem Value;
         public readonly ASTNode Body;
 
-        internal ASTForeach(TokenItem token, ASTNode collection, TokenItem key, TokenItem value, ASTNode body) : base(token)
+        internal ASTForeachConstruction(TokenItem token, ASTNode collection, TokenItem key, TokenItem value, ASTNode body) : base(token)
         {
             Collection = collection;
             Key = key;
