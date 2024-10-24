@@ -142,8 +142,10 @@ namespace PHP.Core.Lang.Tokens
         Integer,                    //  123 012 0x1ac
         [TokenTypePattern(@"([0-9]+)[.]([0-9]+)")]
         Float,                      //  1.5
-        [TokenTypePattern(@"('(?:(([^\\'])|(\\.)))*')")]
+        [TokenTypePattern(@"((?<!\\)(?:\\\\)*'((?:\\'|[^'])*)(?<!\\)(?:\\\\)*')|((?<!\\)(?:\\\\)*""((?:\\""|[^""])*)(?<!\\)(?:\\\\)*"")")]
         String,                     //  "" ''
+        [TokenTypePattern(@"")]
+        VariablePlaceholder,
         [TokenTypePattern(@"[a-zA-Z_][a-zA-Z0-9_]*")]
         ConstString,               //  HELLO_WORLD
         [TokenTypePattern(@"\b[Nn][Uu][Ll][Ll]\b")]
@@ -269,18 +271,6 @@ namespace PHP.Core.Lang.Tokens
         Catch,                    //  catch
         Finally,                  //  finally
 
-        //  Magic Constants
-        /*
-        T_FILE,                     //  __FILE__
-        T_FUNC_C,                   //  __FUNCTION__
-        T_CLASS_C,                  //  __CLASS__
-        T_DIR,                      //  __DIR__
-        T_TRAIT_C,                  //  __TRAIT__
-        T_LINE,                     //  __LINE__
-        T_METHOD_C,                 //  __METHOD__
-        T_NS_C,                     //  __NAMESPACE__
-        */
-
         //  Language Constructions
         Const,                    //  const
         [TokenTypePattern(@"\b[Ee][Cc][Hh][Oo]\b")]
@@ -289,12 +279,13 @@ namespace PHP.Core.Lang.Tokens
         Print,                    //  print
         [TokenTypePattern(@"\b[Uu][Nn][Ss][Ee][Tt]\b")]
         Unset,                    //  unset
+        [TokenTypePattern(@"\b[Ee][Xx][Ii][Tt]\b")]
+        Exit,                     //  exit
         
         
         Match,                    //  match
         Global,                   //  global
         Declare,                  //  declare
-        EndDeclare,               //  enddeclare
 
         //  Namespaces
         Namespace,                //  namespace
@@ -315,18 +306,5 @@ namespace PHP.Core.Lang.Tokens
         IncludeOnce,             //  include_once
         Require,                  //  require
         RequireOnce,             //  require_once
-
-        //  Basic Functions
-        //  T_UNSET,                    //  unset()
-        //  T_EMPTY,                    //  empty()
-        //  T_EVAL,                     //  eval()
-        //  T_EXIT,                     //  exit() die()
-        //  T_HALT_COMPILER,            //  __halt_compiler()
-        //  T_ISSET,                    //  isset()
-        //  T_LIST,                     //  list()
-        //  T_PRINT,                    //  print()
-
-        //  Incorrect symbols
-        //  T_BAD_CHARACTER, \n (0x0a) и \r (0x0d)
     }
 }

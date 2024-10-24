@@ -170,7 +170,8 @@ namespace PHP.Core.Lang
                     TokenType.Return,
                     TokenType.Unset,
                     TokenType.Break,
-                    TokenType.Continue))
+                    TokenType.Continue,
+                    TokenType.Exit))
             {
                 ASTNode node = ParseCommands();
                 NextToken(TokenType.Semicolon);
@@ -406,6 +407,18 @@ namespace PHP.Core.Lang
                 if(!IsMatch(TokenType.Semicolon))
                     operand = ParseExpression();
                 return new ASTBreakOperator(token, operand);
+            }
+            return ParseExitOperator();
+        }
+        private ASTNode ParseExitOperator()
+        {
+            if (IsMatch(TokenType.Exit))
+            {
+                TokenItem token = NextToken();
+                ASTNode operand = null;
+                if(!IsMatch(TokenType.Semicolon))
+                    operand = ParseExpression();
+                return new ASTExitOperator(token, operand);
             }
             return ParseExpression();
         }

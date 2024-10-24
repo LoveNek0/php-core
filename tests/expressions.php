@@ -1,5 +1,4 @@
 <?php
-
 $result1 = 10 + 5;
 $result2 = 20 - 8;
 $result3 = 6 * 4;
@@ -28,3 +27,5 @@ $mergedArray[] = 'd';
 unset($mergedArray[1]);
 
 $arrayLength = count($mergedArray);
+
+exit 0;

@@ -1,6 +1,6 @@
 namespace PHP.Core.Runtime.Statements
 {
-    public interface AbstractStatement
+    internal interface AbstractStatement
     {
         
     }

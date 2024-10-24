@@ -12,9 +12,9 @@ namespace PHP.Core.Runtime.Memory
     {
         public class Pointer
         {
-            public MemoryData Data;
+            public Memory Data;
 
-            public Pointer(MemoryData data = null) => this.Data = data;
+            public Pointer(Memory data = null) => this.Data = data;
 
             public override string ToString() => $"({Data})";
         }
@@ -31,14 +31,14 @@ namespace PHP.Core.Runtime.Memory
                 return pointer;
             return null;
         }
-        public MemoryData GetData(string name)
+        public Memory GetData(string name)
         {
             Pointer p = GetPointer(name);
             if (p == null)
                 throw new RuntimeException($"Trying to get value from variable \"{name}\" but it's not defined.");
             return p.Data;
         }
-        public void SetData(string name, MemoryData data)
+        public void SetData(string name, Memory data)
         {
             Pointer p = GetPointer(name);
             if(p == null)

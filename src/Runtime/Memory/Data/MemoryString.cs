@@ -1,37 +1,66 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PHP.Core.Runtime.Memory.Data
 {
-    public class MemoryString : MemoryData
+    public class MemoryString : Memory
     {
-        private string value;
-        public MemoryString(string value = "") : base(DataType.String) => this.value = value;
+        private string _value;
 
-        public override MemoryData Clone() => new MemoryString(value);
-        public override bool Equals(MemoryData data) => ToString().Equals(data.ToString());
-        public override int GetHashCode() => this.value.GetHashCode();
+        public MemoryString() : base(DataType.String) => this._value = "";
+        public MemoryString(string value) : base(DataType.String) => this._value = value;
 
-        public override MemoryBoolean ToMemoryBoolean() => new MemoryBoolean(ToBool());
-        public override MemoryInteger ToMemoryInteger() => new MemoryInteger(ToLong());
-        public override MemoryFloat ToMemoryFloat() => new MemoryFloat(ToDecimal());
+        public override MemoryBoolean ToMemoryBoolean() =>
+            new MemoryBoolean(new[] { "true", "1", "yes", "on" }.Contains(this._value.ToLower(CultureInfo.InvariantCulture)));
+        
+        public override MemoryInteger ToMemoryInteger() => new MemoryInteger(long.TryParse(this._value, CultureInfo.InvariantCulture, out long value) ? value : 0);
+
+        public override MemoryFloat ToMemoryFloat() => new MemoryFloat(double.TryParse(this._value, CultureInfo.InvariantCulture, out double value) ? value : 0);
+
         public override MemoryString ToMemoryString() => this;
-        public override MemoryArray ToMemoryArray() => new MemoryArray(this);
 
-        public override bool ToBool() => (new string[] { "true", "1", "on", "yes" }).Contains(value.ToLower());
-        public override short ToShort() => short.TryParse(value, out short o) ? o : (short)0;
-        public override ushort ToUShort() => ushort.TryParse(value, out ushort o) ? o : (ushort)0;
-        public override int ToInt() => int.TryParse(value, out int o) ? o : (int)0;
-        public override uint ToUInt() => uint.TryParse(value, out uint o) ? o : (uint)0;
-        public override long ToLong() => long.TryParse(value, out long o) ? o : (long)0;
-        public override ulong ToULong() => ulong.TryParse(value, out ulong o) ? o : (ulong)0;
-        public override float ToFloat() => float.TryParse(value, out float o) ? o : (float)0;
-        public override double ToDouble() => double.TryParse(value, out double o) ? o : (double)0;
-        public override decimal ToDecimal() => decimal.TryParse(value, out decimal o) ? o : (decimal)0;
-        public override string ToString() => value;
-        public override IReadOnlyDictionary<MemoryData, MemoryData> ToDictionary() => ToMemoryArray().ToDictionary();
+        public override MemoryArray ToMemoryArray() => new MemoryArray(this.Clone());
+        
+        public override MemoryObject ToMemoryObject() => new MemoryObject(this.Clone());
+        public override bool ToBool()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int ToInt()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override float ToFloat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return this._value;
+        }
+
+        public override Memory Clone() => new MemoryString(this._value);
+        public override bool Equals(Memory memory)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string ToDumpString() => $"\"{this._value}\"";
+        public override Memory Add(Memory right)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

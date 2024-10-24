@@ -54,6 +54,7 @@ namespace PHP.Core.Lang
             TokenType.Switch,                    //  switch
             TokenType.Case,                      //  case
             TokenType.Default,                   //  default
+            TokenType.Exit,                      //  exit
             TokenType.Comma,                      //  ,
             TokenType.Semicolon,                  //  ;
             TokenType.DoubleColon,                  //  ::
@@ -114,7 +115,7 @@ namespace PHP.Core.Lang
             TokenType.Query,                      //  ?
             TokenType.Float,                      //  1.5
             TokenType.Integer,                    //  123 012 0x1ac
-            TokenType.String,                     //  "" ''
+            //TokenType.String,                     //  "" ''
             TokenType.Variable,                 //  $var_1
             TokenType.ConstString,                  //   Hello_World
             TokenType.Whitespace,                 //  \t \r \n
@@ -131,17 +132,17 @@ namespace PHP.Core.Lang
             this.Code = code;
             Reset();
         }
-
-        public void Reset()
+        
+        private void Reset()
         {
             _position = 0;
             _line = 0;
             _column = 0;
         }
 
-        public bool HasNext() => _position <= Code.Length;
+        private bool HasNext() => _position <= Code.Length;
 
-        public TokenItem NextToken()
+        private TokenItem NextToken()
         {
             if (_position == Code.Length)
             {
@@ -175,7 +176,15 @@ namespace PHP.Core.Lang
         {
             List<TokenItem> tokens = new List<TokenItem>();
             while (HasNext())
+            {
+                /*TokenItem item = NextToken();
+                if (item.Type == TokenType.String)
+                {
+                    
+                }
+                tokens.Add();*/
                 tokens.Add(NextToken());
+            }
             return tokens.ToArray();
         }
     }
